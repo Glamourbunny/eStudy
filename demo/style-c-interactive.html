@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高中数学知识体系 - 五大主线</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; color: #fff; }
+
+        header { text-align: center; padding: 50px 20px 30px; }
+        h1 { font-size: 2.5rem; font-weight: 300; letter-spacing: 0.15em; margin-bottom: 10px; background: linear-gradient(90deg, #e94560, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: rgba(255,255,255,0.6); font-size: 1rem; }
+
+        .search-box { max-width: 500px; margin: 30px auto; position: relative; }
+        .search-box input { width: 100%; padding: 15px 50px 15px 20px; border: none; border-radius: 30px; background: rgba(255,255,255,0.1); color: #fff; font-size: 1rem; outline: none; transition: background 0.3s; }
+        .search-box input::placeholder { color: rgba(255,255,255,0.5); }
+        .search-box input:focus { background: rgba(255,255,255,0.2); }
+        .search-icon { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.5; }
+
+        .main-content { max-width: 1100px; margin: 0 auto; padding: 20px; }
+
+        .main-line { margin-bottom: 35px; }
+        .main-line-header { display: flex; align-items: center; margin-bottom: 15px; padding: 15px 20px; background: rgba(255,255,255,0.08); border-radius: 12px; cursor: pointer; transition: background 0.3s; }
+        .main-line-header:hover { background: rgba(255,255,255,0.12); }
+        .main-line-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-right: 15px; }
+        .line-1 .main-line-icon { background: linear-gradient(135deg, #e94560, #ff6b6b); }
+        .line-2 .main-line-icon { background: linear-gradient(135deg, #3498db, #9b59b6); }
+        .line-3 .main-line-icon { background: linear-gradient(135deg, #f39c12, #f1c40f); }
+        .line-4 .main-line-icon { background: linear-gradient(135deg, #2ecc71, #1abc9c); }
+        .line-5 .main-line-icon { background: linear-gradient(135deg, #9b59b6, #e74c3c); }
+
+        .main-line-title { flex: 1; }
+        .main-line-title h2 { font-size: 1.1rem; font-weight: 500; margin-bottom: 3px; }
+        .main-line-title span { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+
+        .expand-icon { font-size: 1.3rem; transition: transform 0.3s; color: rgba(255,255,255,0.4); padding: 5px; }
+        .main-line.active .expand-icon { transform: rotate(45deg); }
+
+        .main-line-content { display: none; padding: 0 10px; }
+        .main-line.active .main-line-content { display: block; }
+
+        .flow-container { display: flex; flex-wrap: wrap; gap: 12px; padding: 15px 0; }
+        .flow-node { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 12px 16px; min-width: 140px; border-left: 3px solid; transition: transform 0.2s, background 0.2s; }
+        .flow-node:hover { background: rgba(255,255,255,0.12); transform: translateY(-2px); }
+        .line-1 .flow-node { border-color: #e94560; }
+        .line-2 .flow-node { border-color: #3498db; }
+        .line-3 .flow-node { border-color: #f39c12; }
+        .line-4 .flow-node { border-color: #2ecc71; }
+        .line-5 .flow-node { border-color: #9b59b6; }
+
+        .flow-node-title { font-size: 0.9rem; font-weight: 500; margin-bottom: 6px; }
+        .flow-node-book { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+        .flow-node-items { display: flex; flex-wrap: wrap; gap: 5px; }
+        .flow-node-items span { background: rgba(255,255,255,0.1); padding: 3px 8px; border-radius: 10px; font-size: 0.7rem; color: rgba(255,255,255,0.7); }
+
+        .arrow { display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.3); font-size: 1.2rem; padding: 0 5px; }
+        .arrow-down { width: 100%; text-align: center; padding: 8px 0; }
+
+        .stats { display: flex; justify-content: center; gap: 50px; margin-top: 50px; padding: 30px; }
+        .stat { text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: 300; background: linear-gradient(90deg, #e94560, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { font-size: 0.85rem; color: rgba(255,255,255,0.5); margin-top: 5px; }
+
+        footer { text-align: center; padding: 40px; color: rgba(255,255,255,0.3); font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>高中数学知识体系</h1>
+        <p class="subtitle">五大知识主线 · 贯穿三年学习</p>
+    </header>
+
+    <div class="search-box">
+        <input type="text" placeholder="搜索知识点...">
+        <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="main-content">
+        <!-- 主线① 函数与分析链 -->
+        <div class="main-line line-1" onclick="toggleLine(this)">
+            <div class="main-line-header">
+                <div class="main-line-icon">📈</div>
+                <div class="main-line-title">
+                    <h2>主线① 函数与分析链</h2>
+                    <span>函数概念 → 幂指对 → 三角函数 → 数列 → 导数</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="flow-container">
+                    <div class="flow-node">
+                        <div class="flow-node-title">函数概念</div>
+                        <div class="flow-node-book">必修一 · 第三册</div>
+                        <div class="flow-node-items">
+                            <span>定义域</span><span>值域</span><span>单调性</span><span>奇偶性</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">幂指对函数</div>
+                        <div class="flow-node-book">必修一 · 第四章</div>
+                        <div class="flow-node-items">
+                            <span>指数函数</span><span>对数函数</span><span>幂函数</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">三角函数</div>
+                        <div class="flow-node-book">必修一 · 第五章</div>
+                        <div class="flow-node-items">
+                            <span>弧度制</span><span>图像</span><span>诱导公式</span><span>恒等变换</span>
+                        </div>
+                    </div>
+                    <div class="arrow-down">↓</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">数列</div>
+                        <div class="flow-node-book">选择性必修二 · 第一册</div>
+                        <div class="flow-node-items">
+                            <span>等差</span><span>等比</span><span>求和</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">导数</div>
+                        <div class="flow-node-book">选择性必修二 · 第二册</div>
+                        <div class="flow-node-items">
+                            <span>导数定义</span><span>运算</span><span>应用</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线② 几何与度量链 -->
+        <div class="main-line line-2" onclick="toggleLine(this)">
+            <div class="main-line-header">
+                <div class="main-line-icon">📐</div>
+                <div class="main-line-title">
+                    <h2>主线② 几何与度量链</h2>
+                    <span>平面向量 → 复数 → 空间向量 → 立体几何 → 直线与圆 → 圆锥曲线</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="flow-container">
+                    <div class="flow-node">
+                        <div class="flow-node-title">平面向量</div>
+                        <div class="flow-node-book">必修二 · 第六章</div>
+                        <div class="flow-node-items">
+                            <span>线性运算</span><span>数量积</span><span>坐标表示</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">解三角形</div>
+                        <div class="flow-node-book">必修二</div>
+                        <div class="flow-node-items">
+                            <span>正弦定理</span><span>余弦定理</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">复数</div>
+                        <div class="flow-node-book">必修二 · 第七章</div>
+                        <div class="flow-node-items">
+                            <span>四则运算</span><span>几何意义</span>
+                        </div>
+                    </div>
+                    <div class="arrow-down">↓</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">空间向量</div>
+                        <div class="flow-node-book">选择性必修一 · 第一册</div>
+                        <div class="flow-node-items">
+                            <span>坐标运算</span><span>应用</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">立体几何</div>
+                        <div class="flow-node-book">必修二/选择性必修一</div>
+                        <div class="flow-node-items">
+                            <span>位置关系</span><span>空间角</span><span>距离</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">直线与圆</div>
+                        <div class="flow-node-book">选择性必修一 · 第二册</div>
+                        <div class="flow-node-items">
+                            <span>方程</span><span>位置关系</span><span>切线</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">圆锥曲线</div>
+                        <div class="flow-node-book">选择性必修一 · 第三册</div>
+                        <div class="flow-node-items">
+                            <span>椭圆</span><span>双曲线</span><span>抛物线</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线③ 代数与结构链 -->
+        <div class="main-line line-3" onclick="toggleLine(this)">
+            <div class="main-line-header">
+                <div class="main-line-icon">🔢</div>
+                <div class="main-line-title">
+                    <h2>主线③ 代数与结构链</h2>
+                    <span>集合 → 常用逻辑 → 不等式 → 计数原理 → 二项式定理</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="flow-container">
+                    <div class="flow-node">
+                        <div class="flow-node-title">集合</div>
+                        <div class="flow-node-book">必修一 · 第一章</div>
+                        <div class="flow-node-items">
+                            <span>概念</span><span>关系</span><span>运算</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">常用逻辑用语</div>
+                        <div class="flow-node-book">必修一 · 第一章</div>
+                        <div class="flow-node-items">
+                            <span>命题</span><span>量词</span><span>条件</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">不等式</div>
+                        <div class="flow-node-book">必修一 · 第一章</div>
+                        <div class="flow-node-items">
+                            <span>基本不等式</span><span>一元二次不等式</span>
+                        </div>
+                    </div>
+                    <div class="arrow-down">↓</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">计数原理</div>
+                        <div class="flow-node-book">选择性必修二 · 第三册</div>
+                        <div class="flow-node-items">
+                            <span>加法原理</span><span>乘法原理</span><span>排列</span><span>组合</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">二项式定理</div>
+                        <div class="flow-node-book">选择性必修二 · 第三册</div>
+                        <div class="flow-node-items">
+                            <span>通项公式</span><span>系数性质</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线④ 概率与统计链 -->
+        <div class="main-line line-4" onclick="toggleLine(this)">
+            <div class="main-line-header">
+                <div class="main-line-icon">🎲</div>
+                <div class="main-line-title">
+                    <h2>主线④ 概率与统计链</h2>
+                    <span>统计 → 概率 → 随机变量 → 成对数据分析</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="flow-container">
+                    <div class="flow-node">
+                        <div class="flow-node-title">统计</div>
+                        <div class="flow-node-book">必修二 · 第九章</div>
+                        <div class="flow-node-items">
+                            <span>抽样</span><span>数字特征</span><span>散点图</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">概率</div>
+                        <div class="flow-node-book">必修二 · 第十章</div>
+                        <div class="flow-node-items">
+                            <span>古典概型</span><span>几何概型</span><span>条件概率</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">随机变量</div>
+                        <div class="flow-node-book">选择性必修三 · 第一章</div>
+                        <div class="flow-node-items">
+                            <span>分布列</span><span>期望</span><span>方差</span><span>二项分布</span><span>正态分布</span>
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">成对数据分析</div>
+                        <div class="flow-node-book">选择性必修三 · 第二章</div>
+                        <div class="flow-node-items">
+                            <span>相关性</span><span>回归分析</span><span>独立性检验</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线⑤ 数学思想链 -->
+        <div class="main-line line-5" onclick="toggleLine(this)">
+            <div class="main-line-header">
+                <div class="main-line-icon">🧠</div>
+                <div class="main-line-title">
+                    <h2>主线⑤ 数学思想链</h2>
+                    <span>贯穿所有章节 · 解题灵魂</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="flow-container">
+                    <div class="flow-node">
+                        <div class="flow-node-title">函数与方程</div>
+                        <div class="flow-node-book">贯穿全程</div>
+                        <div class="flow-node-items">
+                            <span>构造函数</span><span>方程转化</span>
+                        </div>
+                    </div>
+                    <div class="arrow">⟺</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">数形结合</div>
+                        <div class="flow-node-book">贯穿全程</div>
+                        <div class="flow-node-items">
+                            <span>以图助数</span><span>解析几何</span>
+                        </div>
+                    </div>
+                    <div class="arrow">⟺</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">分类讨论</div>
+                        <div class="flow-node-book">贯穿全程</div>
+                        <div class="flow-node-items">
+                            <span>含参问题</span><span>位置不确定</span>
+                        </div>
+                    </div>
+                    <div class="arrow">⟺</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">转化与化归</div>
+                        <div class="flow-node-book">贯穿全程</div>
+                        <div class="flow-node-items">
+                            <span>复杂变简单</span><span>陌生变熟悉</span>
+                        </div>
+                    </div>
+                    <div class="arrow-down">↓</div>
+                    <div class="flow-node">
+                        <div class="flow-node-title">特殊与一般</div>
+                        <div class="flow-node-book">贯穿全程</div>
+                        <div class="flow-node-items">
+                            <span>从特殊到一般</span><span>归纳演绎</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">5</div>
+                <div class="stat-label">知识主线</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">30+</div>
+                <div class="stat-label">知识节点</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">3</div>
+                <div class="stat-label">学年贯通</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>基于新课标教材整理 · 知识结构图</p>
+    </footer>
+
+    <script>
+        function toggleLine(line) {
+            line.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
