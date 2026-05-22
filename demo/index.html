@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高中数学知识体系</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --radius: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.7; }
+
+        header { text-align: center; padding: 40px 20px 25px; }
+        h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: 0.12em; margin-bottom: 8px; background: linear-gradient(90deg, #e94560, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+
+        .search-box { max-width: 480px; margin: 20px auto 30px; position: relative; }
+        .search-box input { width: 100%; padding: 14px 50px 14px 22px; border: none; border-radius: 30px; background: rgba(255,255,255,0.1); color: #fff; font-size: 0.95rem; outline: none; transition: background 0.3s; }
+        .search-box input::placeholder { color: rgba(255,255,255,0.45); }
+        .search-box input:focus { background: rgba(255,255,255,0.18); }
+        .search-icon { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 1.1rem; opacity: 0.45; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+        .main-line { margin-bottom: 28px; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+        .main-line-header { display: flex; align-items: center; padding: 18px 22px; cursor: pointer; transition: background 0.25s; }
+        .main-line-header:hover { background: rgba(255,255,255,0.03); }
+        .main-line-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; }
+        .line-1 .main-line-icon { background: linear-gradient(135deg, #e94560, #ff6b6b); }
+        .line-2 .main-line-icon { background: linear-gradient(135deg, #3498db, #9b59b6); }
+        .line-3 .main-line-icon { background: linear-gradient(135deg, #f39c12, #f1c40f); }
+        .line-4 .main-line-icon { background: linear-gradient(135deg, #2ecc71, #1abc9c); }
+        .line-5 .main-line-icon { background: linear-gradient(135deg, #9b59b6, #e74c3c); }
+
+        .main-line-title { flex: 1; }
+        .main-line-title h2 { font-size: 1.05rem; font-weight: 500; margin-bottom: 3px; }
+        .main-line-title span { font-size: 0.72rem; color: var(--text-muted); }
+        .expand-icon { font-size: 1.3rem; color: var(--text-muted); transition: transform 0.3s; padding: 5px; }
+        .main-line.active .expand-icon { transform: rotate(45deg); }
+
+        .main-line-content { display: none; padding: 20px; border-top: 1px solid rgba(255,255,255,0.04); }
+        .main-line.active .main-line-content { display: block; }
+
+        .nodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .node-card { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 16px; border-left: 3px solid; cursor: pointer; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+        .node-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+
+        .line-1 .node-card { border-color: #e94560; }
+        .line-2 .node-card { border-color: #3498db; }
+        .line-3 .node-card { border-color: #f39c12; }
+        .line-4 .node-card { border-color: #2ecc71; }
+        .line-5 .node-card { border-color: #9b59b6; }
+
+        .node-card-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .node-card-title .arrow { color: var(--text-muted); font-size: 0.9rem; }
+        .node-card-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; }
+        .node-card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .node-card-tags span { background: rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; color: rgba(255,255,255,0.65); }
+
+        footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>高中数学知识体系</h1>
+        <p class="subtitle">五大主线 · 点击节点查看三层卡片</p>
+    </header>
+
+    <div class="search-box">
+        <input type="text" placeholder="搜索知识点...">
+        <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="container">
+        <!-- 主线① 函数与分析链 -->
+        <div class="main-line line-1 active">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">📈</div>
+                <div class="main-line-title">
+                    <h2>主线① 函数与分析链</h2>
+                    <span>函数概念 → 幂指对 → 三角函数 → 数列 → 导数</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="detail-function-concept.html" class="node-card">
+                        <div class="node-card-title">函数概念 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第三章 · 高一</div>
+                        <div class="node-card-tags">
+                            <span>定义域</span><span>值域</span><span>单调性</span><span>奇偶性</span>
+                        </div>
+                    </a>
+                    <a href="detail-幂指对函数.html" class="node-card">
+                        <div class="node-card-title">幂指对函数 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第四章</div>
+                        <div class="node-card-tags">
+                            <span>指数函数</span><span>对数函数</span><span>幂函数</span>
+                        </div>
+                    </a>
+                    <a href="detail-三角函数.html" class="node-card">
+                        <div class="node-card-title">三角函数 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第五章</div>
+                        <div class="node-card-tags">
+                            <span>弧度制</span><span>诱导公式</span><span>恒等变换</span>
+                        </div>
+                    </a>
+                    <a href="detail-数列.html" class="node-card">
+                        <div class="node-card-title">数列 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags">
+                            <span>等差数列</span><span>等比数列</span><span>求和</span>
+                        </div>
+                    </a>
+                    <a href="detail-导数.html" class="node-card">
+                        <div class="node-card-title">导数 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags">
+                            <span>导数定义</span><span>导数运算</span><span>导数应用</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线② 几何与度量链 -->
+        <div class="main-line line-2">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">📐</div>
+                <div class="main-line-title">
+                    <h2>主线② 几何与度量链</h2>
+                    <span>平面向量 → 复数 → 空间向量 → 立体几何 → 圆锥曲线</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">平面向量 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第六章</div>
+                        <div class="node-card-tags"><span>线性运算</span><span>数量积</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">复数 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第七章</div>
+                        <div class="node-card-tags"><span>四则运算</span><span>几何意义</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">空间向量 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>坐标运算</span><span>应用</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">立体几何 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二/选择性必修一</div>
+                        <div class="node-card-tags"><span>位置关系</span><span>空间角</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">圆锥曲线 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>椭圆</span><span>双曲线</span><span>抛物线</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线③ 代数与结构链 -->
+        <div class="main-line line-3">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🔢</div>
+                <div class="main-line-title">
+                    <h2>主线③ 代数与结构链</h2>
+                    <span>集合 → 常用逻辑 → 不等式 → 计数原理 → 二项式定理</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">集合 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第一章</div>
+                        <div class="node-card-tags"><span>概念</span><span>运算</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">常用逻辑 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第一章</div>
+                        <div class="node-card-tags"><span>命题</span><span>量词</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">不等式 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一</div>
+                        <div class="node-card-tags"><span>基本不等式</span><span>一元二次</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">计数原理 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags"><span>加法</span><span>乘法</span><span>排列</span><span>组合</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">二项式定理 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags"><span>通项</span><span>系数性质</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线④ 概率与统计链 -->
+        <div class="main-line line-4">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🎲</div>
+                <div class="main-line-title">
+                    <h2>主线④ 概率与统计链</h2>
+                    <span>统计 → 概率 → 随机变量 → 成对数据分析</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">统计 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第九章</div>
+                        <div class="node-card-tags"><span>抽样</span><span>数字特征</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">概率 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第十章</div>
+                        <div class="node-card-tags"><span>古典概型</span><span>条件概率</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">随机变量 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修三</div>
+                        <div class="node-card-tags"><span>分布列</span><span>期望</span><span>方差</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">成对数据分析 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修三</div>
+                        <div class="node-card-tags"><span>回归</span><span>独立性检验</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线⑤ 数学思想链 -->
+        <div class="main-line line-5">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🧠</div>
+                <div class="main-line-title">
+                    <h2>主线⑤ 数学思想链</h2>
+                    <span>贯穿所有章节 · 解题灵魂</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">函数与方程 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">贯穿全程</div>
+                        <div class="node-card-tags"><span>构造函数</span><span>方程转化</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">数形结合 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">贯穿全程</div>
+                        <div class="node-card-tags"><span>以图助数</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">分类讨论 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">贯穿全程</div>
+                        <div class="node-card-tags"><span>含参问题</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">转化与化归 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">贯穿全程</div>
+                        <div class="node-card-tags"><span>复杂变简单</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>基于新课标教材整理 · 知识结构图</p>
+    </footer>
+
+    <script>
+        function toggleLine(line) {
+            line.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

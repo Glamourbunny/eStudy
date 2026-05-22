@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数列 - 三层卡片</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --border-concept: #f39c12;
+            --border-proposition: #3498db;
+            --border-method: #2ecc71;
+            --accent: #e94560;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.7; }
+
+        .top-bar { display: flex; align-items: center; padding: 15px 25px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.06); position: sticky; top: 0; z-index: 100; }
+        .back-link { display: flex; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .back-link:hover { color: var(--text-primary); }
+        .back-link svg { width: 20px; height: 20px; margin-right: 6px; }
+        .breadcrumb { color: var(--text-muted); margin-left: 12px; font-size: 0.85rem; }
+        .breadcrumb span { color: var(--text-secondary); }
+        .top-bar-title { margin-left: auto; font-size: 0.8rem; color: var(--text-muted); }
+
+        .page-header { padding: 40px 25px 30px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .page-header h1 { font-size: 1.8rem; font-weight: 400; margin-bottom: 8px; letter-spacing: 0.08em; }
+        .page-header .meta { font-size: 0.8rem; color: var(--text-muted); }
+        .page-header .flow-path { margin-top: 15px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); }
+        .page-header .flow-path .node { background: rgba(255,255,255,0.08); padding: 4px 12px; border-radius: 15px; }
+        .page-header .flow-path .arrow { color: var(--text-muted); align-self: center; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 25px 60px; }
+
+        .layer { margin-bottom: 24px; border-radius: var(--radius); overflow: hidden; background: rgba(0,0,0,0.25); }
+        .layer-header { display: flex; align-items: center; padding: 18px 22px; cursor: pointer; transition: background 0.2s; border-left: 4px solid; }
+        .layer-header:hover { background: rgba(255,255,255,0.03); }
+        .layer-concept .layer-header { border-color: var(--border-concept); }
+        .layer-proposition .layer-header { border-color: var(--border-proposition); }
+        .layer-method .layer-header { border-color: var(--border-method); }
+
+        .layer-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; margin-right: 14px; }
+        .layer-concept .layer-icon { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .layer-proposition .layer-icon { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .layer-method .layer-icon { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+        .layer-title { flex: 1; }
+        .layer-title h2 { font-size: 1rem; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+        .layer-title .layer-label { font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; font-weight: 400; }
+        .layer-concept .layer-label { background: rgba(243, 156, 18, 0.25); color: #f39c12; }
+        .layer-proposition .layer-label { background: rgba(52, 152, 219, 0.25); color: #3498db; }
+        .layer-method .layer-label { background: rgba(46, 204, 113, 0.25); color: #2ecc71; }
+        .layer-title span { font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 2px; }
+
+        .layer-toggle { font-size: 1.4rem; color: var(--text-muted); transition: transform 0.3s; padding: 5px; }
+        .layer.active .layer-toggle { transform: rotate(45deg); }
+
+        .layer-content { display: none; padding: 25px; border-top: 1px solid rgba(255,255,255,0.04); }
+        .layer.active .layer-content { display: block; }
+
+        .content-block { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 18px 20px; margin-bottom: 16px; }
+        .content-block:last-child { margin-bottom: 0; }
+        .content-block h3 { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 8px; }
+        .content-block h3::before { content: ''; width: 3px; height: 12px; border-radius: 2px; }
+        .layer-concept .content-block h3::before { background: var(--border-concept); }
+        .layer-proposition .content-block h3::before { background: var(--border-proposition); }
+        .layer-method .content-block h3::before { background: var(--border-method); }
+        .content-block p { font-size: 0.92rem; color: rgba(255,255,255,0.85); margin-bottom: 10px; line-height: 1.8; }
+        .content-block p:last-child { margin-bottom: 0; }
+        .content-block ul, .content-block ol { margin-left: 20px; margin-top: 8px; }
+        .content-block li { font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 6px; line-height: 1.6; }
+        .content-block li:last-child { margin-bottom: 0; }
+
+        .formula { background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 4px; font-family: "Times New Roman", serif; font-style: italic; color: #f39c12; }
+        .theorem { background: rgba(52, 152, 219, 0.1); border-left: 3px solid #3498db; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px; }
+        .data-table th, .data-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .data-table th { color: var(--text-muted); font-weight: 500; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(0,0,0,0.2); }
+        .data-table td:first-child { color: var(--text-secondary); }
+        .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+        .decision-tree { background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 18px; font-size: 0.88rem; }
+        .dt-root { color: var(--accent); font-weight: 500; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px; }
+        .dt-branch { padding-left: 20px; border-left: 2px solid rgba(255,255,255,0.1); margin-left: 8px; margin-bottom: 10px; }
+        .dt-condition { color: var(--text-secondary); margin-bottom: 5px; }
+        .dt-result { color: #2ecc71; }
+        .dt-result.fail { color: #e74c3c; }
+
+        .compare-box { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .compare-item { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 12px 14px; }
+        .compare-item h4 { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .compare-item p { font-size: 0.85rem; color: rgba(255,255,255,0.8); margin: 0; }
+
+        .tag-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.72rem; }
+        .tag-signal { background: rgba(233, 69, 96, 0.2); color: #ff6b6b; }
+        .tag-method { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .tag-note { background: rgba(255,255,255,0.08); color: var(--text-secondary); }
+
+        .fade-in { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            返回
+        </a>
+        <div class="breadcrumb">主线① 函数与分析链 <span>/</span> <span>数列</span></div>
+        <div class="top-bar-title">高中数学知识体系</div>
+    </div>
+
+    <div class="page-header">
+        <h1>🔢 数列</h1>
+        <div class="meta">选择性必修二 · 第一章 · 高二</div>
+        <div class="flow-path">
+            <span class="node">函数概念</span>
+            <span class="arrow">→</span>
+            <span class="node">幂指对函数</span>
+            <span class="arrow">→</span>
+            <span class="node">三角函数</span>
+            <span class="arrow">→</span>
+            <span class="node">数列</span>
+            <span class="arrow">→</span>
+            <span class="node">导数</span>
+        </div>
+    </div>
+
+    <div class="container fade-in">
+        <!-- ========== 概念层 ========== -->
+        <div class="layer layer-concept active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">📖</div>
+                <div class="layer-title">
+                    <h2>概念层 <span class="layer-label">概念</span></h2>
+                    <span>是什么 · 原始定义与要素辨析</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 数列定义 -->
+                <div class="content-block">
+                    <h3>数列的定义</h3>
+                    <p>数列是<strong>定义域为正整数集 N*</strong>（或它的有限子集 {1, 2, 3, ..., n}）的<strong>离散函数</strong>。</p>
+                    <p style="margin-top: 10px;">数列可以看作是一列按照一定顺序排列的数：<span class="formula">a₁, a₂, a₃, ..., aₙ, ...</span></p>
+                    <div class="compare-box" style="margin-top: 14px;">
+                        <div class="compare-item">
+                            <h4>有穷数列</h4>
+                            <p>项数有限，有最后一项</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>无穷数列</h4>
+                            <p>项数无限，没有最后一项</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数列表示 -->
+                <div class="content-block">
+                    <h3>数列的表示方法</h3>
+                    <ul>
+                        <li><strong>通项公式：</strong>aₙ = f(n)，用 n 表示 aₙ</li>
+                        <li><strong>递推公式：</strong>用 aₙ₋₁、aₙ₋₂ 等表示 aₙ</li>
+                        <li><strong>前 n 项和公式：</strong>Sₙ = a₁ + a₂ + ... + aₙ</li>
+                    </ul>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 通项公式是显式表示，递推公式是隐式表示</span>
+                        <span class="tag tag-note">📌 Sₙ 与 aₙ 的关系：aₙ = Sₙ - Sₙ₋₁ (n ≥ 2)</span>
+                    </div>
+                </div>
+
+                <!-- 等差数列定义 -->
+                <div class="content-block">
+                    <h3>等差数列定义</h3>
+                    <p>如果一个数列从第 <strong>2 项</strong>起，每一项与它的前一项的差都等于<strong>同一个常数</strong>，那么这个数列就叫做等差数列。</p>
+                    <div class="theorem">
+                        <p><strong>定义式：</strong><span class="formula">aₙ₊₁ - aₙ = d</span>（常数 d 叫做公差）</p>
+                        <p style="margin-top: 8px;"><strong>通项公式：</strong><span class="formula">aₙ = a₁ + (n-1)d</span></p>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 d > 0 递增，d < 0 递减，d = 0 常数列</span>
+                    </div>
+                </div>
+
+                <!-- 等比数列定义 -->
+                <div class="content-block">
+                    <h3>等比数列定义</h3>
+                    <p>如果一个数列从第 <strong>2 项</strong>起，每一项与它的前一项的比都等于<strong>同一个常数</strong>，那么这个数列就叫做等比数列。</p>
+                    <div class="theorem">
+                        <p><strong>定义式：</strong><span class="formula">aₙ₊₁ / aₙ = q</span>（常数 q 叫做公比，q ≠ 0）</p>
+                        <p style="margin-top: 8px;"><strong>通项公式：</strong><span class="formula">aₙ = a₁ · qⁿ⁻¹</span></p>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">⚠️ a₁ ≠ 0，q ≠ 0 是等比数列的基本要求</span>
+                        <span class="tag tag-note">📌 |q| > 1 指数增长，|q| < 1 趋于 0，q < 0 振荡</span>
+                    </div>
+                </div>
+
+                <!-- 概念辨析 -->
+                <div class="content-block">
+                    <h3>等差与等比数列概念辨析</h3>
+                    <table class="data-table">
+                        <tr><th>特征</th><th>等差数列</th><th>等比数列</th></tr>
+                        <tr><td>基本运算</td><td>加/减（差值相等）</td><td>乘/除（比值相等）</td></tr>
+                        <tr><td>公差/公比</td><td>d = aₙ₊₁ - aₙ</td><td>q = aₙ₊₁ / aₙ</td></tr>
+                        <tr><td>通项结构</td><td>一次函数型</td><td>指数函数型</td></tr>
+                        <tr><td>图像特征</th><td>点在直线上</td><td>点在指数曲线上</td></tr>
+                        <tr><td>中项公式</td><td>2b = a + c</td><td>b² = ac</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 命题层 ========== -->
+        <div class="layer layer-proposition active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">📐</div>
+                <div class="layer-title">
+                    <h2>命题层 <span class="layer-label">命题</span></h2>
+                    <span>为什么 · 定理、性质与公式</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 等差数列性质 -->
+                <div class="content-block">
+                    <h3>等差数列命题</h3>
+                    <div class="theorem">
+                        <p><strong>前 n 项和公式：</strong></p>
+                        <p><span class="formula">Sₙ = n(a₁ + aₙ)/2 = na₁ + n(n-1)d/2</span></p>
+                    </div>
+                    <div class="compare-box" style="margin-top: 14px;">
+                        <div class="compare-item">
+                            <h4>等差中项</h4>
+                            <p>若 a, b, c 成等差，则 2b = a + c</p>
+                            <p>b 叫做 a 和 c 的等差中项</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>重要性质</h4>
+                            <p>若 m + n = p + q，则 aₘ + aₙ = aₚ + aᵧ</p>
+                            <p>特别地，aₘ + aₙ₊₁₋ₘ = a₁ + aₙ</p>
+                        </div>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 Sₙ 是关于 n 的二次函数（d ≠ 0 时）</span>
+                        <span class="tag tag-note">📌 Sₙ, S₂ₙ-Sₙ, S₃ₙ-S₂ₙ 仍成等差数列</span>
+                    </div>
+                </div>
+
+                <!-- 等比数列性质 -->
+                <div class="content-block">
+                    <h3>等比数列命题</h3>
+                    <div class="theorem">
+                        <p><strong>前 n 项和公式：</strong></p>
+                        <p>当 q ≠ 1 时：<span class="formula">Sₙ = a₁(1 - qⁿ)/(1 - q) = a₁(qⁿ - 1)/(q - 1)</span></p>
+                        <p style="margin-top: 8px;">当 q = 1 时：<span class="formula">Sₙ = na₁</span></p>
+                    </div>
+                    <div class="compare-box" style="margin-top: 14px;">
+                        <div class="compare-item">
+                            <h4>等比中项</h4>
+                            <p>若 a, b, c 成等比，则 b² = ac</p>
+                            <p>b 叫做 a 和 c 的等比中项</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>重要性质</h4>
+                            <p>若 m + n = p + q，则 aₘ · aₙ = aₚ · aᵧ</p>
+                            <p>特别地，aₘ · aₙ₊₁₋ₘ = a₁ · aₙ</p>
+                        </div>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">⚠️ q = 1 时是常系数列，q = -1 时是交替数列</span>
+                        <span class="tag tag-note">📌 |q| < 1 时，qⁿ → 0（当 n → ∞），Sₙ 有极限</span>
+                    </div>
+                </div>
+
+                <!-- 数列判段 -->
+                <div class="content-block">
+                    <h3>数列单调性与有界性定理</h3>
+                    <div class="theorem">
+                        <p><strong>单调性判别：</strong></p>
+                        <p>等差数列：d > 0 则递增，d < 0 则递减</p>
+                        <p>等比数列：a₁ > 0 且 q > 1 时递增；a₁ > 0 且 0 < q < 1 时递减</p>
+                    </div>
+                    <div class="compare-box" style="margin-top: 14px;">
+                        <div class="compare-item">
+                            <h4>有界性</h4>
+                            <p>数列有上界：存在 M 使 aₙ ≤ M 恒成立</p>
+                            <p>数列有下界：存在 m 使 aₙ ≥ m 恒成立</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>收敛数列</h4>
+                            <p>单调有界数列必有极限</p>
+                            <p>等比数列 |q| < 1 时收敛于 0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 方法层 ========== -->
+        <div class="layer layer-method active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">🔧</div>
+                <div class="layer-title">
+                    <h2>方法层 <span class="layer-label">方法</span></h2>
+                    <span>怎么用 · 题型识别与解题流程</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 求通项公式 -->
+                <div class="content-block">
+                    <h3>求通项公式的方法</h3>
+                    <div class="decision-tree">
+                        <div class="dt-root">📋 已知条件 → 通项公式</div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">已知 a₁ 和 d/q</div>
+                            <div class="dt-result">直接套用等差/等比通项公式</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">已知 Sₙ 表达式</div>
+                            <div class="dt-result">用 aₙ = Sₙ - Sₙ₋₁（n ≥ 2），再验证 a₁</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">已知递推关系</div>
+                            <div class="dt-result">累加法（等差型）或累乘法（等比型）</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">已知 aₘ, aₙ, m, n</div>
+                            <div class="dt-result">等差：d = (aₙ-aₘ)/(n-m)；等比：qⁿ⁻ᵐ = aₙ/aₘ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 求和的方法 -->
+                <div class="content-block">
+                    <h3>数列求和的方法</h3>
+                    <div class="decision-tree">
+                        <div class="dt-root">📋 数列求和 — 方法选择</div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">等差数列</div>
+                            <div class="dt-result">公式法：Sₙ = n(a₁+aₙ)/2</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">等比数列（q ≠ 1）</div>
+                            <div class="dt-result">公式法：Sₙ = a₁(1-qⁿ)/(1-q)</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">等差×等比（错位相减）</div>
+                            <div class="dt-result">乘以 q 相减，大量项相互抵消</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">分式型 1/[n(n+k)]（裂项）</div>
+                            <div class="dt-result">裂项：1/[n(n+1)] = 1/n - 1/(n+1)</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">可分组求和</div>
+                            <div class="dt-result">拆分成等差+等比分别求和</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 递推数列 -->
+                <div class="content-block">
+                    <h3>递推数列的解法</h3>
+                    <div class="decision-tree">
+                        <div class="dt-root">📋 由递推式求通项</div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">aₙ₊₁ = aₙ + d（等差递推）</div>
+                            <div class="dt-result">→ 等差数列，aₙ = a₁ + (n-1)d</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">aₙ₊₁ = q · aₙ（等比递推）</div>
+                            <div class="dt-result">→ 等比数列，aₙ = a₁ · qⁿ⁻¹</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">aₙ₊₁ = p·aₙ + q（标准线性递推）</div>
+                            <div class="dt-result">→ 设 aₙ₊₁ - A = p(aₙ - A)，求 A = q/(1-p)</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">aₙ₊₁ = p·aₙ + q·n + r（高阶递推）</div>
+                            <div class="dt-result">→ 待定系数法，构造新等比数列</div>
+                        </div>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-signal">💡 一阶线性递推：aₙ₊₁ = p·aₙ + q 的通解 = 特解 + 齐次解</span>
+                    </div>
+                </div>
+
+                <!-- 综合应用 -->
+                <div class="content-block">
+                    <h3>数列与函数、不等式综合</h3>
+                    <ul>
+                        <li><strong>数列的函数观点：</strong>数列是定义域为 N* 的函数，可用函数思想研究单调性、极值</li>
+                        <li><strong>最值问题：</strong>等差数列前 n 项和 Sₙ = (d/2)n² + (a₁-d/2)n，是二次函数在正整数上的最值</li>
+                        <li><strong>不等式证明：</strong>放缩法、裂项相消后的放缩、数学归纳法</li>
+                        <li><strong>实际应用题：</strong>等差→等差数列求和；等比→等比数列求和；复利问题</li>
+                    </ul>
+                </div>
+
+                <!-- 跨章节迁移 -->
+                <div class="content-block">
+                    <h3>跨章节方法迁移</h3>
+                    <ul>
+                        <li><strong>导数法判断单调性：</strong>将 aₙ 视为离散函数，可用差分 Δaₙ = aₙ₊₁ - aₙ 判断单调性</li>
+                        <li><strong>向量法：</strong>等差数列前 n 项和可类比梯形面积公式</li>
+                        <li><strong>复数法：</strong>等比数列求和公式的复数形式应用</li>
+                    </ul>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-method">💡 核心思想：数列是特殊的函数，离散与连续的桥梁</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLayer(layer) {
+            layer.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

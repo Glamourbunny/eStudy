@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数概念 - 三层卡片</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --border-concept: #f39c12;
+            --border-proposition: #3498db;
+            --border-method: #2ecc71;
+            --accent: #e94560;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.7; }
+
+        /* 顶部导航栏 */
+        .top-bar { display: flex; align-items: center; padding: 15px 25px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.06); position: sticky; top: 0; z-index: 100; }
+        .back-link { display: flex; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .back-link:hover { color: var(--text-primary); }
+        .back-link svg { width: 20px; height: 20px; margin-right: 6px; }
+        .breadcrumb { color: var(--text-muted); margin-left: 12px; font-size: 0.85rem; }
+        .breadcrumb span { color: var(--text-secondary); }
+        .top-bar-title { margin-left: auto; font-size: 0.8rem; color: var(--text-muted); }
+
+        /* 页面标题区 */
+        .page-header { padding: 40px 25px 30px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .page-header h1 { font-size: 1.8rem; font-weight: 400; margin-bottom: 8px; letter-spacing: 0.08em; }
+        .page-header .meta { font-size: 0.8rem; color: var(--text-muted); }
+        .page-header .flow-path { margin-top: 15px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); }
+        .page-header .flow-path .node { background: rgba(255,255,255,0.08); padding: 4px 12px; border-radius: 15px; }
+        .page-header .flow-path .arrow { color: var(--text-muted); align-self: center; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 25px 60px; }
+
+        /* 三层层级 */
+        .layer { margin-bottom: 24px; border-radius: var(--radius); overflow: hidden; background: rgba(0,0,0,0.25); }
+        .layer-header { display: flex; align-items: center; padding: 18px 22px; cursor: pointer; transition: background 0.2s; border-left: 4px solid; }
+        .layer-header:hover { background: rgba(255,255,255,0.03); }
+        .layer-concept .layer-header { border-color: var(--border-concept); }
+        .layer-proposition .layer-header { border-color: var(--border-proposition); }
+        .layer-method .layer-header { border-color: var(--border-method); }
+
+        .layer-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; margin-right: 14px; }
+        .layer-concept .layer-icon { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .layer-proposition .layer-icon { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .layer-method .layer-icon { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+        .layer-title { flex: 1; }
+        .layer-title h2 { font-size: 1rem; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+        .layer-title .layer-label { font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; font-weight: 400; }
+        .layer-concept .layer-label { background: rgba(243, 156, 18, 0.25); color: #f39c12; }
+        .layer-proposition .layer-label { background: rgba(52, 152, 219, 0.25); color: #3498db; }
+        .layer-method .layer-label { background: rgba(46, 204, 113, 0.25); color: #2ecc71; }
+        .layer-title span { font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 2px; }
+
+        .layer-toggle { font-size: 1.4rem; color: var(--text-muted); transition: transform 0.3s; padding: 5px; }
+        .layer.active .layer-toggle { transform: rotate(45deg); }
+
+        .layer-content { display: none; padding: 25px; border-top: 1px solid rgba(255,255,255,0.04); }
+        .layer.active .layer-content { display: block; }
+
+        /* 内容块 */
+        .content-block { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 18px 20px; margin-bottom: 16px; }
+        .content-block:last-child { margin-bottom: 0; }
+        .content-block h3 { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 8px; }
+        .content-block h3::before { content: ''; width: 3px; height: 12px; border-radius: 2px; }
+        .layer-concept .content-block h3::before { background: var(--border-concept); }
+        .layer-proposition .content-block h3::before { background: var(--border-proposition); }
+        .layer-method .content-block h3::before { background: var(--border-method); }
+        .content-block p { font-size: 0.92rem; color: rgba(255,255,255,0.85); margin-bottom: 10px; line-height: 1.8; }
+        .content-block p:last-child { margin-bottom: 0; }
+        .content-block ul, .content-block ol { margin-left: 20px; margin-top: 8px; }
+        .content-block li { font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 6px; line-height: 1.6; }
+        .content-block li:last-child { margin-bottom: 0; }
+
+        /* 特殊样式 */
+        .formula { background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 4px; font-family: "Times New Roman", serif; font-style: italic; color: #f39c12; }
+        .theorem { background: rgba(52, 152, 219, 0.1); border-left: 3px solid #3498db; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+        .theorem p { color: rgba(255,255,255,0.9); font-size: 0.9rem; }
+
+        /* 表格 */
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px; }
+        .data-table th, .data-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .data-table th { color: var(--text-muted); font-weight: 500; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(0,0,0,0.2); }
+        .data-table td:first-child { color: var(--text-secondary); width: 100px; }
+        .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* 决策树 */
+        .decision-tree { background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 18px; font-size: 0.88rem; }
+        .dt-root { color: var(--accent); font-weight: 500; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px; }
+        .dt-branch { padding-left: 20px; border-left: 2px solid rgba(255,255,255,0.1); margin-left: 8px; margin-bottom: 10px; }
+        .dt-condition { color: var(--text-secondary); margin-bottom: 5px; }
+        .dt-result { color: #2ecc71; }
+        .dt-result.fail { color: #e74c3c; }
+
+        /* 标签 */
+        .tag-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.72rem; }
+        .tag-signal { background: rgba(233, 69, 96, 0.2); color: #ff6b6b; }
+        .tag-method { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .tag-note { background: rgba(255,255,255,0.08); color: var(--text-secondary); }
+
+        /* 对比框 */
+        .compare-box { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .compare-item { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 12px 14px; }
+        .compare-item h4 { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .compare-item p { font-size: 0.85rem; color: rgba(255,255,255,0.8); margin: 0; }
+
+        /* 动画 */
+        .fade-in { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="top-bar">
+        <a href="index.html" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            返回
+        </a>
+        <div class="breadcrumb">主线① 函数与分析链 <span>/</span> <span>函数概念</span></div>
+        <div class="top-bar-title">高中数学知识体系</div>
+    </div>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1>📐 函数概念</h1>
+        <div class="meta">必修一 · 第三章 · 高一</div>
+        <div class="flow-path">
+            <span class="node">函数概念</span>
+            <span class="arrow">→</span>
+            <span class="node">幂指对函数</span>
+            <span class="arrow">→</span>
+            <span class="node">三角函数</span>
+            <span class="arrow">→</span>
+            <span class="node">数列</span>
+            <span class="arrow">→</span>
+            <span class="node">导数</span>
+        </div>
+    </div>
+
+    <div class="container fade-in">
+        <!-- ========== 概念层 ========== -->
+        <div class="layer layer-concept active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">📖</div>
+                <div class="layer-title">
+                    <h2>概念层 <span class="layer-label">概念</span></h2>
+                    <span>是什么 · 原始定义与要素辨析</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 原始定义 -->
+                <div class="content-block">
+                    <h3>原始定义（教材原文）</h3>
+                    <p>设 A、B 是非空的数集，如果按照某种确定的对应关系 f，使对于集合 A 中的<strong>任意一个数 x</strong>，在集合 B 中都有<strong>唯一确定的数 f(x)</strong> 和它对应，那么就称 <span class="formula">f：A → B</span> 为从集合 A 到集合 B 的<strong>函数</strong>，记作 <span class="formula">y = f(x)</span>。</p>
+                </div>
+
+                <!-- 定义三要素 -->
+                <div class="content-block">
+                    <h3>定义的三要素</h3>
+                    <table class="data-table">
+                        <tr><th>要素</th><th>含义</th><th>核心问题</th></tr>
+                        <tr><td>定义域</td><td>自变量 x 的取值范围</td><td>"谁可以输入？"</td></tr>
+                        <tr><td>值域</td><td>因变量 y 的取值范围</td><td>"输出什么？"</td></tr>
+                        <tr><td>对应法则 f</td><td>x → y 的对应规则</td><td>"怎么算？"</td></tr>
+                    </table>
+                    <div class="tag-group" style="margin-top: 14px;">
+                        <span class="tag tag-note">💡 两函数相等 ⟺ 定义域相同 且 对应法则相同</span>
+                    </div>
+                </div>
+
+                <!-- 易混淆概念辨析 -->
+                <div class="content-block">
+                    <h3>易混淆概念辨析</h3>
+                    <div class="compare-box">
+                        <div class="compare-item">
+                            <h4>函数 f(x)</h4>
+                            <p>y 随 x 变化的<strong>过程</strong>，强调动态关系</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>方程 F(x,y)=0</h4>
+                            <p>x、y 满足的<strong>约束条件</strong>，强调静态关系</p>
+                        </div>
+                    </div>
+                    <div class="compare-box" style="margin-top: 12px;">
+                        <div class="compare-item">
+                            <h4>函数 f(x)</h4>
+                            <p>定义域为<strong>连续区间</strong>（或区间并）</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>数列 aₙ</h4>
+                            <p>定义域为<strong>正整数集</strong> {1,2,3,...} 的特殊函数</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 函数与映射的关系 -->
+                <div class="content-block">
+                    <h3>函数与映射的关系</h3>
+                    <p>函数是映射的特殊情况：</p>
+                    <ul style="margin-top: 8px;">
+                        <li>映射：集合 A（定义域）→ 集合 B（陪域），A 中元素必须都有唯一对应</li>
+                        <li>函数：A、B 都是<strong>数集</strong>的特殊映射</li>
+                    </ul>
+                    <div class="tag-group" style="margin-top: 10px;">
+                        <span class="tag tag-note">📌 函数 ⊂ 映射</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 命题层 ========== -->
+        <div class="layer layer-proposition active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">📐</div>
+                <div class="layer-title">
+                    <h2>命题层 <span class="layer-label">命题</span></h2>
+                    <span>为什么 · 定理、性质与公式</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 函数相等条件 -->
+                <div class="content-block">
+                    <h3>函数相等定理</h3>
+                    <div class="theorem">
+                        <p>两个函数 f(x) 和 g(x) 相等的<strong>充要条件</strong>：</p>
+                        <p style="margin-top: 8px; font-size: 0.95rem;">① 定义域相同<br>② 对应法则相同</p>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">⚠️ 判断函数相等时，<strong>定义域优先</strong></span>
+                    </div>
+                </div>
+
+                <!-- 单调性定理 -->
+                <div class="content-block">
+                    <h3>单调性定理</h3>
+                    <p><strong>定义（增量形式）：</strong>设 f(x) 在区间 D 上有定义，若对任意 x₁, x₂ ∈ D：</p>
+                    <ul style="margin-top: 10px;">
+                        <li>当 x₁ &lt; x₂ 时，若 f(x₁) &lt; f(x₂) ⇒ f(x) 在 D 上<strong>递增</strong></li>
+                        <li>当 x₁ &lt; x₂ 时，若 f(x₁) > f(x₂) ⇒ f(x) 在 D 上<strong>递减</strong></li>
+                    </ul>
+                    <p style="margin-top: 12px;"><strong>图像判定法：</strong>从左向右看，图像上升则递增，下降则递减。</p>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 单调性是区间性质，说"函数在区间 D 上单调"</span>
+                    </div>
+                </div>
+
+                <!-- 奇偶性定理 -->
+                <div class="content-block">
+                    <h3>奇偶性定理</h3>
+                    <div class="compare-box">
+                        <div class="compare-item">
+                            <h4>奇函数</h4>
+                            <p><span class="formula">f(−x) = −f(x)</span></p>
+                            <p style="margin-top: 6px; font-size: 0.8rem; color: var(--text-muted);">图像关于原点对称</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>偶函数</h4>
+                            <p><span class="formula">f(−x) = f(x)</span></p>
+                            <p style="margin-top: 6px; font-size: 0.8rem; color: var(--text-muted);">图像关于 y 轴对称</p>
+                        </div>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">⚠️ 定义域必须关于原点对称</span>
+                        <span class="tag tag-note">📌 f(0) = 0 是奇函数的必要条件（非充分）</span>
+                    </div>
+                </div>
+
+                <!-- 最值定理 -->
+                <div class="content-block">
+                    <h3>最值存在定理</h3>
+                    <div class="theorem">
+                        <p>若 f(x) 在闭区间 [a, b] 上<strong>连续</strong>，则：</p>
+                        <p style="margin-top: 8px;">① f(x) 必有<strong>最大值</strong>和<strong>最小值</strong><br>② 最值在<strong>端点</strong>或<strong>极值点</strong>处取得</p>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 开区间上连续 ≠ 有最值（如 y = x 在 (−1,1) 上无最值）</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 方法层 ========== -->
+        <div class="layer layer-method active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">🔧</div>
+                <div class="layer-title">
+                    <h2>方法层 <span class="layer-label">方法</span></h2>
+                    <span>怎么用 · 题型识别与解题流程</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 求定义域 -->
+                <div class="content-block">
+                    <h3>求定义域的决策树</h3>
+                    <div class="decision-tree">
+                        <div class="dt-root">📋 求定义域 — 先列出解析式中的限制条件</div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">分式函数 → 分母 ≠ 0</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">偶次根式 → 被开方数 ≥ 0</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">对数函数 log<sub>a</sub>x → 真数 x > 0</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">复合函数 f(g(x)) → 先求 g(x) 的值域，再将其作为 f 的定义域</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">多个函数和差积商 → 分别求定义域，再取交集</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 判断单调性 -->
+                <div class="content-block">
+                    <h3>单调性判断 — 方法选择</h3>
+                    <div style="margin-bottom: 12px;">
+                        <span class="tag tag-signal">表达式可因式分解</span>
+                        <span class="tag tag-signal">差值比较可行</span>
+                        <span class="tag tag-method">→ 定义法：f(x₁) - f(x₂)</span>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <span class="tag tag-signal">二次函数</span>
+                        <span class="tag tag-signal">图像对称轴明确</span>
+                        <span class="tag tag-method">→ 配方法 + 对称轴</span>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <span class="tag tag-signal">可导函数</span>
+                        <span class="tag tag-signal">高阶函数</span>
+                        <span class="tag tag-method">→ 求导法：f'(x) > 0?</span>
+                    </div>
+                    <div>
+                        <span class="tag tag-signal">抽象函数</span>
+                        <span class="tag tag-signal">赋值法</span>
+                        <span class="tag tag-method">→ 特殊值法 + 单调性定义</span>
+                    </div>
+                </div>
+
+                <!-- 奇偶性判定 -->
+                <div class="content-block">
+                    <h3>奇偶性判定流程</h3>
+                    <div class="decision-tree">
+                        <div class="dt-root">🔍 判断奇偶性 — 三步走</div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">Step 1: 先看定义域是否关于原点对称</div>
+                            <div class="dt-result fail">不对称 → <strong>非奇非偶</strong>（直接结束）</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">Step 2: 求 f(−x)，与 f(x) 比较</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">Step 3: 结论</div>
+                            <div class="dt-result">f(−x) = f(x) → <strong>偶函数</strong></div>
+                            <div class="dt-result">f(−x) = −f(x) → <strong>奇函数</strong></div>
+                            <div class="dt-result fail">都不成立 → <strong>非奇非偶</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 跨章节迁移 -->
+                <div class="content-block">
+                    <h3>跨章节方法迁移</h3>
+                    <ul>
+                        <li><strong>向量法判断单调性：</strong>将函数值视为向量点积，利用向量数量积的几何意义辅助理解</li>
+                        <li><strong>导数法研究函数：</strong>导数是研究函数单调性、极值的通用工具，后续贯穿整个函数体系</li>
+                        <li><strong>数形结合：</strong>函数图像与代数表达式结合，可快速判断奇偶性、零点、最值</li>
+                        <li><strong>换元法：</strong>复合函数与数列求通项中使用，转化复杂形式为简单形式</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLayer(layer) {
+            layer.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

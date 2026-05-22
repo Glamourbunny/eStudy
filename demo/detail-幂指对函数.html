@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幂指对函数 - 三层卡片</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --border-concept: #f39c12;
+            --border-proposition: #3498db;
+            --border-method: #2ecc71;
+            --accent: #e94560;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.7; }
+
+        .top-bar { display: flex; align-items: center; padding: 15px 25px; background: rgba(0,0,0,0.3); border-bottom: 1px solid rgba(255,255,255,0.06); position: sticky; top: 0; z-index: 100; }
+        .back-link { display: flex; align-items: center; color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .back-link:hover { color: var(--text-primary); }
+        .back-link svg { width: 20px; height: 20px; margin-right: 6px; }
+        .breadcrumb { color: var(--text-muted); margin-left: 12px; font-size: 0.85rem; }
+        .breadcrumb span { color: var(--text-secondary); }
+        .top-bar-title { margin-left: auto; font-size: 0.8rem; color: var(--text-muted); }
+
+        .page-header { padding: 40px 25px 30px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .page-header h1 { font-size: 1.8rem; font-weight: 400; margin-bottom: 8px; letter-spacing: 0.08em; }
+        .page-header .meta { font-size: 0.8rem; color: var(--text-muted); }
+        .page-header .flow-path { margin-top: 15px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; font-size: 0.75rem; color: var(--text-secondary); }
+        .page-header .flow-path .node { background: rgba(255,255,255,0.08); padding: 4px 12px; border-radius: 15px; }
+        .page-header .flow-path .arrow { color: var(--text-muted); align-self: center; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 25px 60px; }
+
+        .layer { margin-bottom: 24px; border-radius: var(--radius); overflow: hidden; background: rgba(0,0,0,0.25); }
+        .layer-header { display: flex; align-items: center; padding: 18px 22px; cursor: pointer; transition: background 0.2s; border-left: 4px solid; }
+        .layer-header:hover { background: rgba(255,255,255,0.03); }
+        .layer-concept .layer-header { border-color: var(--border-concept); }
+        .layer-proposition .layer-header { border-color: var(--border-proposition); }
+        .layer-method .layer-header { border-color: var(--border-method); }
+
+        .layer-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; margin-right: 14px; }
+        .layer-concept .layer-icon { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .layer-proposition .layer-icon { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .layer-method .layer-icon { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+        .layer-title { flex: 1; }
+        .layer-title h2 { font-size: 1rem; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+        .layer-title .layer-label { font-size: 0.65rem; padding: 2px 8px; border-radius: 10px; font-weight: 400; }
+        .layer-concept .layer-label { background: rgba(243, 156, 18, 0.25); color: #f39c12; }
+        .layer-proposition .layer-label { background: rgba(52, 152, 219, 0.25); color: #3498db; }
+        .layer-method .layer-label { background: rgba(46, 204, 113, 0.25); color: #2ecc71; }
+        .layer-title span { font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 2px; }
+
+        .layer-toggle { font-size: 1.4rem; color: var(--text-muted); transition: transform 0.3s; padding: 5px; }
+        .layer.active .layer-toggle { transform: rotate(45deg); }
+
+        .layer-content { display: none; padding: 25px; border-top: 1px solid rgba(255,255,255,0.04); }
+        .layer.active .layer-content { display: block; }
+
+        .content-block { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 18px 20px; margin-bottom: 16px; }
+        .content-block:last-child { margin-bottom: 0; }
+        .content-block h3 { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; gap: 8px; }
+        .content-block h3::before { content: ''; width: 3px; height: 12px; border-radius: 2px; }
+        .layer-concept .content-block h3::before { background: var(--border-concept); }
+        .layer-proposition .content-block h3::before { background: var(--border-proposition); }
+        .layer-method .content-block h3::before { background: var(--border-method); }
+        .content-block p { font-size: 0.92rem; color: rgba(255,255,255,0.85); margin-bottom: 10px; line-height: 1.8; }
+        .content-block p:last-child { margin-bottom: 0; }
+        .content-block ul, .content-block ol { margin-left: 20px; margin-top: 8px; }
+        .content-block li { font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 6px; line-height: 1.6; }
+        .content-block li:last-child { margin-bottom: 0; }
+
+        .formula { background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 4px; font-family: "Times New Roman", serif; font-style: italic; color: #f39c12; }
+        .theorem { background: rgba(52, 152, 219, 0.1); border-left: 3px solid #3498db; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px; }
+        .data-table th, .data-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .data-table th { color: var(--text-muted); font-weight: 500; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; background: rgba(0,0,0,0.2); }
+        .data-table td:first-child { color: var(--text-secondary); width: 100px; }
+        .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+        .decision-tree { background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding: 18px; font-size: 0.88rem; }
+        .dt-root { color: var(--accent); font-weight: 500; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px; }
+        .dt-branch { padding-left: 20px; border-left: 2px solid rgba(255,255,255,0.1); margin-left: 8px; margin-bottom: 10px; }
+        .dt-condition { color: var(--text-secondary); margin-bottom: 5px; }
+        .dt-result { color: #2ecc71; }
+        .dt-result.fail { color: #e74c3c; }
+
+        .compare-box { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+        .compare-item { background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); padding: 12px 14px; }
+        .compare-item h4 { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .compare-item p { font-size: 0.85rem; color: rgba(255,255,255,0.8); margin: 0; }
+
+        .tag-group { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+        .tag { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.72rem; }
+        .tag-signal { background: rgba(233, 69, 96, 0.2); color: #ff6b6b; }
+        .tag-method { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .tag-note { background: rgba(255,255,255,0.08); color: var(--text-secondary); }
+
+        .fade-in { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="index.html" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            返回
+        </a>
+        <div class="breadcrumb">主线① 函数与分析链 <span>/</span> <span>幂指对函数</span></div>
+        <div class="top-bar-title">高中数学知识体系</div>
+    </div>
+
+    <div class="page-header">
+        <h1>📊 幂指对函数</h1>
+        <div class="meta">必修一 · 第四章 · 高一</div>
+        <div class="flow-path">
+            <span class="node">函数概念</span>
+            <span class="arrow">→</span>
+            <span class="node">幂指对函数</span>
+            <span class="arrow">→</span>
+            <span class="node">三角函数</span>
+            <span class="arrow">→</span>
+            <span class="node">数列</span>
+            <span class="arrow">→</span>
+            <span class="node">导数</span>
+        </div>
+    </div>
+
+    <div class="container fade-in">
+        <!-- ========== 概念层 ========== -->
+        <div class="layer layer-concept active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">📖</div>
+                <div class="layer-title">
+                    <h2>概念层 <span class="layer-label">概念</span></h2>
+                    <span>是什么 · 原始定义与要素辨析</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 指数函数原始定义 -->
+                <div class="content-block">
+                    <h3>指数函数原始定义</h3>
+                    <p>一般地，函数 <span class="formula">y = aˣ</span>（a > 0 且 a ≠ 1）叫做<strong>指数函数</strong>，其中 x 是自变量，定义域为 R。</p>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 底数 a 必须满足：a > 0 且 a ≠ 1</span>
+                        <span class="tag tag-note">📌 指数 x 是自变量，范围为全体实数 R</span>
+                    </div>
+                </div>
+
+                <!-- 对数函数原始定义 -->
+                <div class="content-block">
+                    <h3>对数函数原始定义</h3>
+                    <p>一般地，函数 <span class="formula">y = logₐx</span>（a > 0 且 a ≠ 1）叫做<strong>对数函数</strong>，其中 x 是自变量，定义域为 (0, +∞)。</p>
+                    <p style="margin-top: 10px;"><strong>与指数函数的关系：</strong></p>
+                    <ul style="margin-top: 8px;">
+                        <li>对数函数是指数函数的<strong>反函数</strong></li>
+                        <li><span class="formula">y = logₐx ⟺ x = aʸ</span></li>
+                        <li>图像关于直线 <span class="formula">y = x</span> 对称</li>
+                    </ul>
+                </div>
+
+                <!-- 幂函数原始定义 -->
+                <div class="content-block">
+                    <h3>幂函数原始定义</h3>
+                    <p>一般地，函数 <span class="formula">y = x^α</span> 叫做<strong>幂函数</strong>，其中 x 是自变量，α 是常数。</p>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 幂函数的指数 α 可以是任意实数</span>
+                        <span class="tag tag-note">📌 定义域随 α 的取值而变化</span>
+                    </div>
+                </div>
+
+                <!-- 指数运算律 -->
+                <div class="content-block">
+                    <h3>指数与对数的运算要素</h3>
+                    <table class="data-table">
+                        <tr><th>运算</th><th>指数律</th><th>对数律</th></tr>
+                        <tr><td>积</td><td>aᵐ · aⁿ = aᵐ⁺ⁿ</td><td>logₐ(MN) = logₐM + logₐN</td></tr>
+                        <tr><td>商</td><td>aᵐ ÷ aⁿ = aᵐ⁻ⁿ</td><td>logₐ(M/N) = logₐM - logₐN</td></tr>
+                        <tr><td>幂</td><td>(aᵐ)ⁿ = aᵐⁿ</td><td>logₐMⁿ = n · logₐM</td></tr>
+                        <tr><td>换底</td><td>—</td><td>logₐM = logᵦM / logᵦa</td></tr>
+                    </table>
+                </div>
+
+                <!-- 三类函数对比 -->
+                <div class="content-block">
+                    <h3>三类函数对比辨析</h3>
+                    <table class="data-table">
+                        <tr><th>函数</th><th>表达式</th><th>定义域</th><th>值域</th><th>过定点</th></tr>
+                        <tr><td>指数函数</td><td>y = aˣ</td><td>R</td><td>(0, +∞)</td><td>(0, 1)</td></tr>
+                        <tr><td>对数函数</td><td>y = logₐx</td><td>(0, +∞)</td><td>R</td><td>(1, 0)</td></tr>
+                        <tr><td>幂函数</td><td>y = x^α</td><td>随α变化</td><td>随α变化</td><td>(1, 1)</td></tr>
+                    </table>
+                </div>
+
+                <!-- 幂函数定义域规律 -->
+                <div class="content-block">
+                    <h3>幂函数定义域规律（重要）</h3>
+                    <table class="data-table">
+                        <tr><th>指数 α</th><th>定义域</th><th>示例</th></tr>
+                        <tr><td>正整数</td><td>R</td><td>y = x³</td></tr>
+                        <tr><td>负整数</td><tdtd>x ≠ 0</td><td>y = x⁻¹ = 1/x</td></tr>
+                        <tr><td>分数（m/n，n为奇）</td><tdtd>R</td><td>y = x^(1/3)</td></tr>
+                        <tr><td>分数（m/n，n为偶）</td><tdtd>[0, +∞)</td><td>y = x^(1/2) = √x</td></tr>
+                        <tr><td>无理数</td><tdtd>[0, +∞)</td><td>y = x^√2</td></tr>
+                    </table>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">💡 记忆口诀：负指数取倒、分母定奇偶、有理数看最简</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 命题层 ========== -->
+        <div class="layer layer-proposition active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">📐</div>
+                <div class="layer-title">
+                    <h2>命题层 <span class="layer-label">命题</span></h2>
+                    <span>为什么 · 定理、性质与公式</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 指数函数性质 -->
+                <div class="content-block">
+                    <h3>指数函数命题（a > 0, a ≠ 1）</h3>
+                    <div class="theorem">
+                        <p><strong>单调性：</strong></p>
+                        <p>当 a > 1 时，y = aˣ 在 R 上<strong>单调递增</strong></p>
+                        <p>当 0 < a < 1 时，y = aˣ 在 R 上<strong>单调递减</strong></p>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 指数函数值域 (0, +∞)，永远大于 0</span>
+                        <span class="tag tag-note">📌 aˣ1 > aˣ2 ⟺ 当 a>1 时 x₁ > x₂；当 0<a<1 时 x₁ < x₂</span>
+                    </div>
+                </div>
+
+                <!-- 对数函数性质 -->
+                <div class="content-block">
+                    <h3>对数函数命题（a > 0, a ≠ 1）</h3>
+                    <div class="theorem">
+                        <p><strong>单调性：</strong></p>
+                        <p>当 a > 1 时，y = logₐx 在 (0, +∞) 上<strong>单调递增</strong></p>
+                        <p>当 0 < a < 1 时，y = logₐx 在 (0, +∞) 上<strong>单调递减</strong></p>
+                    </div>
+                    <div class="compare-box" style="margin-top: 14px;">
+                        <div class="compare-item">
+                            <h4>常用对数</h4>
+                            <p>lg x = log₁₀x（底数为10）</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>自然对数</h4>
+                            <p>ln x = logₑx（底数为 e ≈ 2.718）</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 幂函数性质 -->
+                <div class="content-block">
+                    <h3>常见幂函数图像性质</h3>
+                    <table class="data-table">
+                        <tr><th>α</th><th>函数</th><th>定义域</th><th>值域</th><th>奇偶性</th><th>过定点</th></tr>
+                        <tr><td>1</td><td>y = x</td><td>R</td><td>R</td><td>奇</td><td>(0,0), (1,1)</td></tr>
+                        <tr><td>2</td><td>y = x²</td><td>R</td><td>[0,+∞)</td><td>偶</td><td>(0,0), (1,1)</td></tr>
+                        <tr><td>3</td><td>y = x³</td><td>R</td><td>R</td><td>奇</td><td>(0,0), (1,1)</td></tr>
+                        <tr><td>1/2</td><td>y = x^(1/2)</td><td>[0,+∞)</td><td>[0,+∞)</td><td>非奇非偶</td><td>(0,0), (1,1)</td></tr>
+                        <tr><td>-1</td><td>y = x⁻¹</td><td>x≠0</td><td>y≠0</td><td>奇</td><td>(1,1)</td></tr>
+                    </table>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-note">📌 所有幂函数都过 (1, 1) 点</span>
+                        <span class="tag tag-note">📌 α > 0 时过 (0, 0)；α < 0 时不过 (0, 0)</span>
+                    </div>
+                </div>
+
+                <!-- 反函数定理 -->
+                <div class="content-block">
+                    <h3>反函数存在定理</h3>
+                    <div class="theorem">
+                        <p>指数函数 y = aˣ 和对数函数 y = logₐx 互为反函数。</p>
+                        <p style="margin-top: 8px;">即：f⁻¹(x) = logₐx 当且仅当 f(x) = aˣ</p>
+                    </div>
+                    <div class="compare-box" style="margin-top: 12px;">
+                        <div class="compare-item">
+                            <h4>反函数性质</h4>
+                            <p>f(f⁻¹(x)) = x</p>
+                            <p>f⁻¹(f(x)) = x</p>
+                        </div>
+                        <div class="compare-item">
+                            <h4>图像关系</h4>
+                            <p>反函数图像关于 y = x 对称</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 方法层 ========== -->
+        <div class="layer layer-method active">
+            <div class="layer-header" onclick="toggleLayer(this.parentElement)">
+                <div class="layer-icon">🔧</div>
+                <div class="layer-title">
+                    <h2>方法层 <span class="layer-label">方法</span></h2>
+                    <span>怎么用 · 题型识别与解题流程</span>
+                </div>
+                <span class="layer-toggle">+</span>
+            </div>
+            <div class="layer-content">
+                <!-- 比较大小 -->
+                <div class="content-block">
+                    <h3>比较大小 — 题型识别</h3>
+                    <div class="decision-tree">
+                        <div class="dt-root">📋 比较大小 — 常见题型与解法</div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">底数相同，指数不同</div>
+                            <div class="dt-result">利用指数函数单调性：aˣ₁ vs aˣ₂ → 比较 x₁, x₂</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">指数相同，底数不同</div>
+                            <div class="dt-result">构造幂函数或利用图像：xᵃ 形式比较底数</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">底数指数都不同</div>
+                            <div class="dt-result">找中间量（0 或 1）：先跟 0/1 比，再比较</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">对数比较大小</div>
+                            <div class="dt-result">logₐx 与 logₐy：a>1 时看 x,y；0<a<1 时相反</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 解不等式 -->
+                <div class="content-block">
+                    <h3>解指数/对数不等式</h3>
+                    <div class="decision-tree">
+                        <div class="dt-root">📋 解不等式 — 标准化 + 单调性</div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">指数不等式 aᶠ⁽ˣ⁾ > aᵍ⁽ˣ⁾</div>
+                            <div class="dt-result">a > 1：等价于 f(x) > g(x)</div>
+                            <div class="dt-result fail">0 < a < 1：等价于 f(x) < g(x)（单调性相反）</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">对数不等式 logₐf(x) > logₐg(x)</div>
+                            <div class="dt-result">先保证定义域：f(x) > 0 且 g(x) > 0</div>
+                            <div class="dt-result">a > 1：等价于 f(x) > g(x)</div>
+                            <div class="dt-result fail">0 < a < 1：等价于 f(x) < g(x)</div>
+                        </div>
+                    </div>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-signal">⚠️ 定义域优先！先写出隐含条件</span>
+                        <span class="tag tag-signal">⚠️ 对数函数真数必须 > 0</span>
+                    </div>
+                </div>
+
+                <!-- 求定义域 -->
+                <div class="content-block">
+                    <h3>复合函数定义域</h3>
+                    <div class="decision-tree">
+                        <div class="dt-root">📋 求复合函数定义域 — 层层约束</div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">已知 f(x) 定义域为 D</div>
+                            <div class="dt-result">求 f(g(x)) 定义域：解 g(x) ∈ D</div>
+                        </div>
+                        <div class="dt-branch">
+                            <div class="dt-condition">f(x) = aˣ⁺¹ + logₐ(2x-1)</div>
+                            <div class="dt-result">两个约束：x+1 ∈ R（恒成立）且 2x-1 > 0</div>
+                            <div class="dt-result">取交集：x > 1/2</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图像识别 -->
+                <div class="content-block">
+                    <h3>图像识别与应用</h3>
+                    <ul>
+                        <li><strong>指数函数图像：</strong>过 (0,1)，在 x 轴上方，a>1 时上升，0<a<1 时下降</li>
+                        <li><strong>对数函数图像：</strong>过 (1,0)，在 y 轴右侧，a>1 时上升，0<a<1 时下降</li>
+                        <li><strong>幂函数图像：</strong>α>0 时过 (0,0) 和 (1,1)；α<0 时不过 (0,0)</li>
+                        <li><strong>图像交点：</strong>方程 aˣ = logₐx 的解 = 图像交点个数</li>
+                    </ul>
+                </div>
+
+                <!-- 跨章节迁移 -->
+                <div class="content-block">
+                    <h3>跨章节方法迁移</h3>
+                    <ul>
+                        <li><strong>导数法判断单调性：</strong>(aˣ)' = aˣ · ln a，可快速判断指数函数增长速度</li>
+                        <li><strong>对数运算综合题：</strong>结合函数零点，logₐf(x)=0 ⟺ f(x)=1（定义域内）</li>
+                        <li><strong>数列中的指数运算：</strong>等比数列通项 aₙ = a₁ · qⁿ⁻¹，指数运算律同样适用</li>
+                        <li><strong>换元法：</strong>令 t = logₐx 换元，解二次不等式</li>
+                    </ul>
+                    <div class="tag-group" style="margin-top: 12px;">
+                        <span class="tag tag-method">💡 核心思想：指数与对数互为逆运算，转化是解题关键</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLayer(layer) {
+            layer.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>高中数学知识体系 · 五大主线</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #e2e8f0;
+  min-height: 100vh;
+  padding: 20px;
+}
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin-bottom: 8px;
+}
+.header p {
+  color: #94a3b8;
+  font-size: 14px;
+}
+.search-box {
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+.search-box input {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 30px;
+  border: 1px solid rgba(148,163,184,0.2);
+  background: rgba(30,41,59,0.8);
+  color: #e2e8f0;
+  font-size: 15px;
+  outline: none;
+}
+.search-box input::placeholder { color: #64748b; }
+.mainline {
+  max-width: 1100px;
+  margin: 0 auto 24px;
+  background: rgba(30,41,59,0.6);
+  border-radius: 16px;
+  border: 1px solid rgba(148,163,184,0.1);
+  overflow: hidden;
+}
+.mainline-header {
+  display: flex;
+  align-items: center;
+  padding: 18px 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.mainline-header:hover { background: rgba(255,255,255,0.03); }
+.mainline-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+.mainline-icon.func { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+.mainline-icon.geom { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+.mainline-title { flex: 1; }
+.mainline-title h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f8fafc;
+  margin-bottom: 4px;
+}
+.mainline-title .path {
+  font-size: 13px;
+  color: #64748b;
+}
+.mainline-toggle {
+  font-size: 20px;
+  color: #64748b;
+  transition: transform 0.3s;
+}
+.mainline.expanded .mainline-toggle { transform: rotate(45deg); }
+.mainline-body {
+  display: none;
+  padding: 0 24px 24px;
+}
+.mainline.expanded .mainline-body { display: block; }
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 900px) {
+  .modules-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .modules-grid { grid-template-columns: 1fr; }
+}
+.module-card {
+  background: rgba(15,23,42,0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,0.08);
+  padding: 18px;
+  transition: all 0.3s;
+}
+.module-card:hover {
+  border-color: rgba(99,102,241,0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.module-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+.module-arrow {
+  color: #64748b;
+  font-size: 18px;
+}
+.module-book {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 12px;
+}
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+.tag:hover { transform: scale(1.05); }
+.tag.formal {
+  background: rgba(244,63,94,0.12);
+  color: #fb7185;
+  border-color: rgba(244,63,94,0.25);
+}
+.tag.formal:hover { background: rgba(244,63,94,0.2); }
+.tag.intuitive {
+  background: rgba(59,130,246,0.12);
+  color: #60a5fa;
+  border-color: rgba(59,130,246,0.25);
+}
+.tag.intuitive:hover { background: rgba(59,130,246,0.2); }
+.tag .queue-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+.tag.formal .queue-indicator { background: #f43f5e; }
+.tag.intuitive .queue-indicator { background: #3b82f6; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>五大主线 · 点击节点查看详情</h1>
+  <p>高中数学知识体系 · 物化生跨学科融合版</p>
+</div>
+
+<div class="search-box">
+  <input type="text" placeholder="搜索知识点...">
+</div>
+
+<!-- 主线① -->
+<div class="mainline expanded" id="mainline1">
+  <div class="mainline-header" onclick="toggleMainline('mainline1')">
+    <div class="mainline-icon func">📈</div>
+    <div class="mainline-title">
+      <h2>主线① 函数与分析链</h2>
+      <div class="path">函数概念 → 幂指对 → 三角函数 → 数列 → 导数 → 跨学科融合</div>
+    </div>
+    <div class="mainline-toggle">+</div>
+  </div>
+  <div class="mainline-body">
+    <div class="modules-grid">
+
+      <!-- 模块1：函数概念 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">函数概念</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">必修一 · 第三章 · 高一</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=函数"><span class="queue-indicator"></span>函数</a>
+          <a class="tag formal" href="concept.html?name=定义域"><span class="queue-indicator"></span>定义域</a>
+          <a class="tag formal" href="concept.html?name=值域"><span class="queue-indicator"></span>值域</a>
+          <a class="tag formal" href="concept.html?name=单调性"><span class="queue-indicator"></span>单调性</a>
+          <a class="tag formal" href="concept.html?name=奇偶性"><span class="queue-indicator"></span>奇偶性</a>
+          <a class="tag intuitive" href="concept.html?name=映射"><span class="queue-indicator"></span>映射</a>
+          <a class="tag intuitive" href="concept.html?name=拓扑区间"><span class="queue-indicator"></span>拓扑区间</a>
+        </div>
+      </div>
+
+      <!-- 模块2：幂指对函数 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">幂指对函数</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">必修一 · 第四章</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=指数函数"><span class="queue-indicator"></span>指数函数</a>
+          <a class="tag formal" href="concept.html?name=对数函数"><span class="queue-indicator"></span>对数函数</a>
+          <a class="tag formal" href="concept.html?name=幂函数"><span class="queue-indicator"></span>幂函数</a>
+          <a class="tag formal" href="concept.html?name=基本初等函数"><span class="queue-indicator"></span>基本初等函数</a>
+          <a class="tag intuitive" href="concept.html?name=指数爆炸"><span class="queue-indicator"></span>指数爆炸</a>
+          <a class="tag intuitive" href="concept.html?name=对数尺度"><span class="queue-indicator"></span>对数尺度</a>
+        </div>
+      </div>
+
+      <!-- 模块3：三角函数 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">三角函数</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">必修一 · 第五章</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=弧度制"><span class="queue-indicator"></span>弧度制</a>
+          <a class="tag formal" href="concept.html?name=诱导公式"><span class="queue-indicator"></span>诱导公式</a>
+          <a class="tag formal" href="concept.html?name=三角恒等变换"><span class="queue-indicator"></span>三角恒等变换</a>
+          <a class="tag formal" href="concept.html?name=变换"><span class="queue-indicator"></span>变换</a>
+        </div>
+      </div>
+
+      <!-- 模块4：数列 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">数列</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">选择性必修二 · 第四章</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=数列"><span class="queue-indicator"></span>数列</a>
+          <a class="tag formal" href="concept.html?name=等差数列"><span class="queue-indicator"></span>等差数列</a>
+          <a class="tag formal" href="concept.html?name=等比数列"><span class="queue-indicator"></span>等比数列</a>
+          <a class="tag formal" href="concept.html?name=求和"><span class="queue-indicator"></span>求和</a>
+          <a class="tag formal" href="concept.html?name=特征根方程"><span class="queue-indicator"></span>特征根方程</a>
+          <a class="tag intuitive" href="concept.html?name=差分方程"><span class="queue-indicator"></span>差分方程</a>
+        </div>
+      </div>
+
+      <!-- 模块5：导数 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">导数</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">选择性必修二 · 第五章</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=导数定义"><span class="queue-indicator"></span>导数定义</a>
+          <a class="tag formal" href="concept.html?name=Δ语言"><span class="queue-indicator"></span>Δ语言</a>
+          <a class="tag formal" href="concept.html?name=瞬时变化率"><span class="queue-indicator"></span>瞬时变化率</a>
+          <a class="tag formal" href="concept.html?name=泰勒展开"><span class="queue-indicator"></span>泰勒展开</a>
+          <a class="tag formal" href="concept.html?name=隐函数求导"><span class="queue-indicator"></span>隐函数求导</a>
+          <a class="tag formal" href="concept.html?name=参数方程导数"><span class="queue-indicator"></span>参数方程导数</a>
+          <a class="tag formal" href="concept.html?name=微积分基本定理"><span class="queue-indicator"></span>微积分基本定理</a>
+          <a class="tag formal" href="concept.html?name=一阶ODE"><span class="queue-indicator"></span>一阶ODE</a>
+          <a class="tag formal" href="concept.html?name=二阶ODE"><span class="queue-indicator"></span>二阶ODE</a>
+          <a class="tag formal" href="concept.html?name=牛顿迭代"><span class="queue-indicator"></span>牛顿迭代</a>
+          <a class="tag formal" href="concept.html?name=二分法"><span class="queue-indicator"></span>二分法</a>
+          <a class="tag intuitive" href="concept.html?name=极限直观"><span class="queue-indicator"></span>极限直观</a>
+          <a class="tag intuitive" href="concept.html?name=逼近"><span class="queue-indicator"></span>逼近</a>
+          <a class="tag intuitive" href="concept.html?name=定积分直觉"><span class="queue-indicator"></span>定积分直觉</a>
+          <a class="tag intuitive" href="concept.html?name=ODE直觉"><span class="queue-indicator"></span>ODE直觉</a>
+          <a class="tag intuitive" href="concept.html?name=双变量策略"><span class="queue-indicator"></span>双变量策略</a>
+        </div>
+      </div>
+
+      <!-- 模块6：跨学科融合 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">跨学科融合</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">物理/化学/生物 · 选择性必修</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=瞬时速度与加速度"><span class="queue-indicator"></span>瞬时速度与加速度</a>
+          <a class="tag formal" href="concept.html?name=自感电动势"><span class="queue-indicator"></span>自感电动势</a>
+          <a class="tag formal" href="concept.html?name=一级反应速率"><span class="queue-indicator"></span>一级反应速率</a>
+          <a class="tag formal" href="concept.html?name=半衰期"><span class="queue-indicator"></span>半衰期</a>
+          <a class="tag intuitive" href="concept.html?name=变力做功"><span class="queue-indicator"></span>变力做功</a>
+          <a class="tag intuitive" href="concept.html?name=变力冲量"><span class="queue-indicator"></span>变力冲量</a>
+          <a class="tag intuitive" href="concept.html?name=LC振荡"><span class="queue-indicator"></span>LC振荡</a>
+          <a class="tag intuitive" href="concept.html?name=弱酸电离平衡"><span class="queue-indicator"></span>弱酸电离平衡</a>
+          <a class="tag intuitive" href="concept.html?name=pH对数定义"><span class="queue-indicator"></span>pH对数定义</a>
+          <a class="tag intuitive" href="concept.html?name=种群动态"><span class="queue-indicator"></span>种群动态</a>
+          <a class="tag intuitive" href="concept.html?name=酶动力学"><span class="queue-indicator"></span>酶动力学</a>
+          <a class="tag intuitive" href="concept.html?name=谐振波形"><span class="queue-indicator"></span>谐振波形</a>
+          <a class="tag intuitive" href="concept.html?name=交流电相位"><span class="queue-indicator"></span>交流电相位</a>
+          <a class="tag intuitive" href="concept.html?name=简谐运动ODE"><span class="queue-indicator"></span>简谐运动ODE</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 主线② -->
+<div class="mainline" id="mainline2">
+  <div class="mainline-header" onclick="toggleMainline('mainline2')">
+    <div class="mainline-icon geom">📐</div>
+    <div class="mainline-title">
+      <h2>主线② 几何与度量链</h2>
+      <div class="path">平面向量 → 复数 → 空间向量 → 立体几何 → 圆锥曲线 → 轨道与物理场 → 跨学科融合</div>
+    </div>
+    <div class="mainline-toggle">+</div>
+  </div>
+  <div class="mainline-body">
+    <div class="modules-grid">
+
+      <!-- 模块1：[VEC] 平面向量与度量 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">平面向量与度量</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">必修第二册 · 第六章</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=平面向量"><span class="queue-indicator"></span>平面向量</a>
+          <a class="tag formal" href="concept.html?name=线性运算"><span class="queue-indicator"></span>线性运算</a>
+          <a class="tag formal" href="concept.html?name=数量积"><span class="queue-indicator"></span>数量积</a>
+          <a class="tag formal" href="concept.html?name=内积"><span class="queue-indicator"></span>内积（点积）</a>
+          <a class="tag formal" href="concept.html?name=解三角形"><span class="queue-indicator"></span>解三角形</a>
+          <a class="tag formal" href="concept.html?name=正弦定理"><span class="queue-indicator"></span>正弦定理</a>
+          <a class="tag formal" href="concept.html?name=余弦定理"><span class="queue-indicator"></span>余弦定理</a>
+          <a class="tag intuitive" href="concept.html?name=投影"><span class="queue-indicator"></span>投影</a>
+          <a class="tag intuitive" href="concept.html?name=行列式"><span class="queue-indicator"></span>行列式</a>
+          <a class="tag intuitive" href="concept.html?name=概率测度"><span class="queue-indicator"></span>概率测度</a>
+        </div>
+      </div>
+
+      <!-- 模块2：[COMP] 复数与旋转算子 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">复数与旋转算子</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">必修第二册 · 第七章</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=复数"><span class="queue-indicator"></span>复数</a>
+          <a class="tag formal" href="concept.html?name=四则运算"><span class="queue-indicator"></span>四则运算</a>
+          <a class="tag formal" href="concept.html?name=几何意义"><span class="queue-indicator"></span>几何意义</a>
+          <a class="tag intuitive" href="concept.html?name=二维旋转算子"><span class="queue-indicator"></span>二维旋转算子</a>
+          <a class="tag intuitive" href="concept.html?name=欧拉公式"><span class="queue-indicator"></span>欧拉公式</a>
+          <a class="tag intuitive" href="concept.html?name=线性空间"><span class="queue-indicator"></span>线性空间</a>
+        </div>
+      </div>
+
+      <!-- 模块3：[3D] 空间向量与立体几何 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">空间向量与立体几何</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">选择性必修第一册 · 第一章 / 第八章</div>
+        <div class="tags-container">
+          <a class="tag formal" href="concept.html?name=空间向量"><span class="queue-indicator"></span>空间向量</a>
+          <a class="tag formal" href="concept.html?name=坐标运算"><span class="queue-indicator"></span>坐标运算</a>
+          <a class="tag formal" href="concept.html?name=应用"><span class="queue-indicator"></span>应用</a>
+          <a class="tag formal" href="concept.html?name=空间直角坐标系"><span class="queue-indicator"></span>空间直角坐标系</a>
+          <a class="tag formal" href="concept.html?name=空间向量模长"><span class="queue-indicator"></span>空间向量模长</a>
+          <a class="tag formal" href="concept.html?name=空间向量夹角"><span class="queue-indicator"></span>空间向量夹角</a>
+          <a class="tag formal" href="concept.html?name=位置关系"><span class="queue-indicator"></span>位置关系</a>
+          <a class="tag formal" href="concept.html?name=空间角"><span class="queue-indicator"></span>空间角</a>
+          <a class="tag formal" href="concept.html?name=法向量"><span class="queue-indicator"></span>法向量</a>
+          <a class="tag intuitive" href="concept.html?name=算法思维"><span class="queue-indicator"></span>算法思维</a>
+          <a class="tag intuitive" href="concept.html?name=3D渲染"><span class="queue-indicator"></span>3D渲染</a>
+        </div>
+      </div>
+
+      <!-- 模块4：[ANAL] 解析几何与圆锥曲线 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">解析几何与圆锥曲线</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">选择性必修第一册 · 第二章 / 第三章</div>
+        <div class="tags-container">
+          <a class="tag intuitive" href="concept.html?name=解析几何"><span class="queue-indicator"></span>解析几何</a>
+          <a class="tag intuitive" href="concept.html?name=代数化"><span class="queue-indicator"></span>代数化</a>
+          <a class="tag formal" href="concept.html?name=直线"><span class="queue-indicator"></span>直线</a>
+          <a class="tag formal" href="concept.html?name=圆"><span class="queue-indicator"></span>圆</a>
+          <a class="tag formal" href="concept.html?name=切线路径"><span class="queue-indicator"></span>切线路径</a>
+          <a class="tag intuitive" href="concept.html?name=圆锥曲线"><span class="queue-indicator"></span>圆锥曲线</a>
+          <a class="tag formal" href="concept.html?name=椭圆"><span class="queue-indicator"></span>椭圆</a>
+          <a class="tag formal" href="concept.html?name=双曲线"><span class="queue-indicator"></span>双曲线</a>
+          <a class="tag formal" href="concept.html?name=抛物线"><span class="queue-indicator"></span>抛物线</a>
+          <a class="tag intuitive" href="concept.html?name=微分几何"><span class="queue-indicator"></span>微分几何</a>
+        </div>
+      </div>
+
+      <!-- 模块5：[ORBIT] 轨道与物理场 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">轨道与物理场</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">物理 · 必修第二册 / 选择性必修</div>
+        <div class="tags-container">
+          <a class="tag intuitive" href="concept.html?name=物理轨迹"><span class="queue-indicator"></span>物理轨迹</a>
+          <a class="tag formal" href="concept.html?name=万有引力"><span class="queue-indicator"></span>万有引力</a>
+          <a class="tag intuitive" href="concept.html?name=天体运行轨道"><span class="queue-indicator"></span>天体运行轨道</a>
+          <a class="tag formal" href="concept.html?name=开普勒第一定律"><span class="queue-indicator"></span>开普勒第一定律</a>
+          <a class="tag formal" href="concept.html?name=匀强磁场"><span class="queue-indicator"></span>匀强磁场</a>
+          <a class="tag formal" href="concept.html?name=带电粒子磁场圆周运动"><span class="queue-indicator"></span>带电粒子磁场圆周运动</a>
+          <a class="tag formal" href="concept.html?name=平抛运动"><span class="queue-indicator"></span>平抛运动</a>
+        </div>
+      </div>
+
+      <!-- 模块6：[XDISC] 跨学科融合 -->
+      <div class="module-card">
+        <div class="module-header">
+          <div class="module-name">跨学科融合</div>
+          <div class="module-arrow">→</div>
+        </div>
+        <div class="module-book">物理 / 化学 · 选择性必修</div>
+        <div class="tags-container">
+          <a class="tag intuitive" href="concept.html?name=功"><span class="queue-indicator"></span>功</a>
+          <a class="tag intuitive" href="concept.html?name=受力面"><span class="queue-indicator"></span>受力面</a>
+          <a class="tag intuitive" href="concept.html?name=磁感线条数"><span class="queue-indicator"></span>磁感线条数</a>
+          <a class="tag intuitive" href="concept.html?name=复杂晶胞构型"><span class="queue-indicator"></span>复杂晶胞构型</a>
+          <a class="tag formal" href="concept.html?name=六方最密堆积"><span class="queue-indicator"></span>六方最密堆积</a>
+          <a class="tag formal" href="concept.html?name=面心立方"><span class="queue-indicator"></span>面心立方</a>
+          <a class="tag formal" href="concept.html?name=空间占有率"><span class="queue-indicator"></span>空间占有率</a>
+          <a class="tag formal" href="concept.html?name=键长"><span class="queue-indicator"></span>键长</a>
+          <a class="tag formal" href="concept.html?name=键角"><span class="queue-indicator"></span>键角</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleMainline(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('expanded');
+}
+</script>
+
+</body>
+</html>
