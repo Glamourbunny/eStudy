@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识卡片</title>
+<link rel="stylesheet" href="../css/math.css">
+<style>
+/*** concept page styles ***/
+.top-bar {
+    display: flex;
+    align-items: center;
+    padding: 14px 24px;
+    background: rgba(15,23,42,0.9);
+    border-bottom: 1px solid rgba(148,163,184,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+.back-link:hover { color: #e2e8f0; }
+.breadcrumb {
+    margin-left: 16px;
+    font-size: 13px;
+    color: #64748b;
+}
+.breadcrumb span { color: #94a3b8; }
+
+.page-header {
+    text-align: center;
+    padding: 50px 24px 30px;
+    border-bottom: 1px solid rgba(148,163,184,0.08);
+}
+.page-header h1 { font-size: 26px; font-weight: 600; color: #f8fafc; margin-bottom: 10px; }
+.page-header .meta { font-size: 13px; color: #64748b; margin-bottom: 8px; }
+.page-header .tags-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.tag-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+.tag-badge.formal { background: rgba(244,63,94,0.15); color: #fb7185; }
+.tag-badge.intuitive { background: rgba(59,130,246,0.15); color: #60a5fa; }
+
+.container { max-width: 860px; margin: 0 auto; padding: 30px 24px 60px; }
+
+/*** layer styles ***/
+.layer {
+    margin-bottom: 24px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(148,163,184,0.1);
+    background: rgba(30,41,59,0.5);
+}
+.layer-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-left: 4px solid;
+    user-select: none;
+}
+.layer-header:hover { background: rgba(255,255,255,0.03); }
+.layer-concept .layer-header { border-color: #f43f5e; }
+.layer-proposition .layer-header { border-color: #3b82f6; }
+.layer-method .layer-header { border-color: #10b981; }
+.layer-lens .layer-header { border-color: #f97316; }
+.layer-bridge .layer-header { border-color: #8b5cf6; }
+.layer-trigger .layer-header { border-color: #eab308; }
+
+.layer-concept .layer-icon { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+.layer-proposition .layer-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.layer-method .layer-icon { background: linear-gradient(135deg, #10b981, #059669); }
+.layer-lens .layer-icon { background: linear-gradient(135deg, #f97316, #ea580c); }
+.layer-bridge .layer-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.layer-trigger .layer-icon { background: linear-gradient(135deg, #eab308, #ca8a04); }
+
+.layer-concept .layer-label { background: rgba(244,63,94,0.2); color: #fb7185; }
+.layer-proposition .layer-label { background: rgba(59,130,246,0.2); color: #60a5fa; }
+.layer-method .layer-label { background: rgba(16,185,129,0.2); color: #34d399; }
+.layer-lens .layer-label { background: rgba(249,115,22,0.2); color: #fb923c; }
+.layer-bridge .layer-label { background: rgba(139,92,246,0.2); color: #a78bfa; }
+.layer-trigger .layer-label { background: rgba(234,179,8,0.2); color: #facc15; }
+
+.layer-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    margin-right: 14px;
+    flex-shrink: 0;
+}
+.layer-concept .layer-icon { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+.layer-proposition .layer-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.layer-method .layer-icon { background: linear-gradient(135deg, #10b981, #059669); }
+
+.layer-title { flex: 1; }
+.layer-title h2 { font-size: 15px; font-weight: 600; color: #f8fafc; display: flex; align-items: center; gap: 8px; }
+.layer-label {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 400;
+}
+.layer-concept .layer-label { background: rgba(244,63,94,0.2); color: #fb7185; }
+.layer-proposition .layer-label { background: rgba(59,130,246,0.2); color: #60a5fa; }
+.layer-method .layer-label { background: rgba(16,185,129,0.2); color: #34d399; }
+
+.layer-title .subtitle { font-size: 12px; color: #64748b; margin-top: 2px; display: block; }
+.layer-toggle { font-size: 20px; color: #64748b; transition: transform 0.3s; }
+.layer.expanded .layer-toggle { transform: rotate(45deg); }
+.layer-body { display: none; padding: 24px 20px; border-top: 1px solid rgba(148,163,184,0.06); }
+.layer.expanded .layer-body { display: block; }
+
+/*** content block ***/
+.content-block { margin-bottom: 20px; }
+.content-block:last-child { margin-bottom: 0; }
+.content-block h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.content-block h3::before { content: ''; width: 3px; height: 14px; border-radius: 2px; }
+.layer-concept .content-block h3::before { background: #f43f5e; }
+.layer-proposition .content-block h3::before { background: #3b82f6; }
+.layer-method .content-block h3::before { background: #10b981; }
+.layer-lens .content-block h3::before { background: #f97316; }
+.layer-bridge .content-block h3::before { background: #8b5cf6; }
+.layer-trigger .content-block h3::before { background: #eab308; }
+
+.content-block p { font-size: 14px; color: #cbd5e1; line-height: 1.85; margin-bottom: 10px; }
+.content-block p:last-child { margin-bottom: 0; }
+.content-block ul, .content-block ol { margin-left: 20px; margin-top: 8px; }
+.content-block li { font-size: 14px; color: #cbd5e1; margin-bottom: 6px; line-height: 1.75; }
+.content-block li:last-child { margin-bottom: 0; }
+
+/*** table ***/
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+.data-table th, .data-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid rgba(148,163,184,0.08);
+}
+.data-table th {
+    color: #64748b;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: rgba(0,0,0,0.2);
+}
+.data-table td:first-child { color: #94a3b8; width: 120px; }
+.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/*** theorem box ***/
+.theorem-box {
+    background: rgba(59,130,246,0.08);
+    border-left: 3px solid #3b82f6;
+    padding: 14px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+}
+.theorem-box p { color: #e2e8f0; font-size: 14px; }
+
+/*** formula ***/
+.formula {
+    background: rgba(255,255,255,0.06);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: "Times New Roman", serif;
+    color: #fb7185;
+}
+
+/*** decision tree ***/
+.decision-tree {
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 16px;
+    font-size: 13px;
+}
+.dt-root { color: #fb7185; font-weight: 600; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.1); }
+.dt-branch { padding-left: 18px; border-left: 2px solid rgba(255,255,255,0.1); margin-left: 8px; margin-bottom: 8px; }
+.dt-condition { color: #cbd5e1; margin-bottom: 4px; }
+.dt-result { color: #34d399; }
+.dt-result.fail { color: #f87171; }
+
+/*** compare box ***/
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+.compare-item { background: rgba(255,255,255,0.03); border-radius: 8px; padding: 12px 14px; }
+.compare-item h4 { font-size: 12px; color: #64748b; margin-bottom: 6px; text-transform: uppercase; }
+.compare-item p { font-size: 13px; color: #cbd5e1; }
+
+/*** error box ***/
+.error-box {
+    text-align: center;
+    padding: 60px 24px;
+    color: #64748b;
+}
+.error-box h2 { font-size: 18px; color: #94a3b8; margin-bottom: 12px; }
+.error-box p { font-size: 14px; }
+.error-box code { background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; color: #94a3b8; font-size: 13px; }
+
+/*** loading ***/
+.loading { text-align: center; padding: 60px 24px; color: #64748b; font-size: 14px; }
+
+/*** blockquote ***/
+.content-block blockquote {
+    border-left: 3px solid rgba(148,163,184,0.3);
+    padding: 8px 14px;
+    margin: 10px 0;
+    color: #94a3b8;
+    font-size: 13px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 0 6px 6px 0;
+}
+
+/*** code ***/
+.content-block code {
+    background: rgba(255,255,255,0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: "Courier New", monospace;
+    color: #60a5fa;
+}
+
+/*** pre ***/
+.content-block pre {
+    background: rgba(0,0,0,0.4);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+}
+.content-block pre code { background: none; padding: 0; font-size: 13px; color: #e2e8f0; }
+
+/*** ascii diagram in intuitive cards ***/
+.content-block pre.ascii-diagram {
+    font-family: "Courier New", "Menlo", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #cbd5e1;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+    <a href="index.html" class="back-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        返回主页
+    </a>
+    <div class="breadcrumb" id="breadcrumb"></div>
+</div>
+
+<div id="app">
+    <div class="loading">加载中...</div>
+</div>
+
+<script>
+// ======== 简单 Markdown 解析器 ========
+function parseMd(text) {
+    const lines = text.trim().split('\n');
+    const frontmatter = {};
+    let i = 0;
+
+    // parse frontmatter
+    if (lines[i] === '---') {
+        i++;
+        while (i < lines.length && lines[i] !== '---') {
+            const [k, ...v] = lines[i].split(':');
+            if (k && v.length) frontmatter[k.trim()] = v.join(':').trim();
+            i++;
+        }
+        i++; // skip closing ---
+    }
+
+    // skip h1 (title line)
+    while (i < lines.length && !lines[i].trim()) i++;
+    if (i < lines.length && lines[i].startsWith('# ')) {
+        frontmatter.title = lines[i].replace(/^#\s+/, '').trim();
+        i++;
+    }
+
+    // detect card type from frontmatter
+    const cardType = frontmatter.type || '';
+    const isIntuitive = cardType === 'intuitive-card';
+    const isFormal = cardType === 'three-layer-card' || cardType === 'formal-card' || (!isIntuitive && lines.some(l => l.includes('概念层') || l.includes('命题层') || l.includes('方法层')));
+
+    // parse sections
+    const sections = [];
+    let current = null;
+
+    for (; i < lines.length; i++) {
+        const line = lines[i].trim();
+
+        // Intuitive card sections: 视角层/联结层/迁移层
+        if (isIntuitive && (line.startsWith('## 视角层') || line.startsWith('## 联结层') || line.startsWith('## 迁移层'))) {
+            if (current) sections.push(current);
+            const secKey = line.includes('视角层') ? 'lens' : line.includes('联结层') ? 'bridge' : 'trigger';
+            current = { layer: secKey, blocks: [] };
+        }
+        // Formal card sections: 概念层/命题层/方法层
+        else if (!isIntuitive && (line.startsWith('## 概念层') || line.startsWith('## 命题层') || line.startsWith('## 方法层'))) {
+            if (current) sections.push(current);
+            const secKey = line.includes('概念层') ? 'concept' : line.includes('命题层') ? 'proposition' : 'method';
+            current = { layer: secKey, blocks: [] };
+        } else if (line.startsWith('### ') && current) {
+            const title = line.replace(/^###\s+/, '');
+            current.blocks.push({ type: 'subsection', title, content: [] });
+        } else if (current && current.blocks.length > 0) {
+            current.blocks[current.blocks.length - 1].content.push(line);
+        } else if (line && !line.startsWith('>') && current) {
+            current.blocks.push({ type: 'paragraph', text: line });
+        }
+    }
+    if (current) sections.push(current);
+    return { frontmatter, sections, isIntuitive };
+}
+
+function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function renderMdLine(line) {
+    // headers
+    line = line.replace(/^#{3}\s+(.+)/, '<h3>$1</h3>');
+    line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    line = line.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // tables - simple
+    return line;
+}
+
+function renderTable(lines) {
+    const rows = lines.filter(l => l.trim() && !l.startsWith('|------'));
+    if (rows.length < 2) return '';
+    const headers = rows[0].split('|').filter((_,i,a) => i>0 && i<a.length-1).map(h => h.trim());
+    const body = rows.slice(1).map(row => row.split('|').filter((_,i,a) => i>0 && i<a.length-1).map(c => c.trim()));
+    let html = '<table class="data-table"><thead><tr>';
+    headers.forEach(h => html += `<th>${h}</th>`);
+    html += '</tr></thead><tbody>';
+    body.forEach(cells => {
+        html += '<tr>';
+        cells.forEach((c,i) => html += `<td>${cells[i]}</td>`);
+        html += '</tr>';
+    });
+    return html + '</tbody></table>';
+}
+
+function renderBlock(block, layer) {
+    if (block.type === 'paragraph') {
+        let text = block.text;
+        if (!text) return '';
+        text = text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+        text = text.replace(/^(.+ → .+)$/gm, '<div class="dt-condition">$1</div>');
+        text = text.replace(/^(.+ ⇒ .+)$/gm, '<div class="dt-result">$1</div>');
+        text = text.replace(/^√\s+(.+)/gm, '<div class="dt-result">√ $1</div>');
+        text = text.replace(/^×\s+(.+)/gm, '<div class="dt-result fail">× $1</div>');
+        if (text.startsWith('> ')) return `<blockquote>${text.slice(2)}</blockquote>`;
+        return `<p>${text}</p>`;
+    }
+    if (block.type === 'subsection') {
+        const lines = block.content.join('\n').split('\n').filter(l => l.trim());
+        let content = '';
+        // detect if content contains a table
+        if (lines.some(l => l.startsWith('|'))) {
+            content += renderTable(lines);
+        } else {
+            content += lines.map(l => {
+                l = l.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                l = l.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+                l = l.replace(/`([^`]+)`/g, '<code>$1</code>');
+                l = l.replace(/^(.+ → .+)$/gm, '<div class="dt-condition">$1</div>');
+                l = l.replace(/^(.+ ⇒ .+)$/gm, '<div class="dt-result">$1</div>');
+                l = l.replace(/^√\s+(.+)/gm, '<div class="dt-result">√ $1</div>');
+                l = l.replace(/^×\s+(.+)/gm, '<div class="dt-result fail">× $1</div>');
+                if (l.startsWith('> ')) return `<blockquote>${l.slice(2)}</blockquote>`;
+                return l ? `<p>${l}</p>` : '';
+            }).join('');
+        }
+        return `<div class="content-block"><h3>${block.title}</h3>${content}</div>`;
+    }
+    return '';
+}
+
+function renderConceptPage(data) {
+    const { frontmatter, sections, isIntuitive } = data;
+    const LAYER_NAMES = {
+        concept: '概念层', proposition: '命题层', method: '方法层',
+        lens: '视角层', bridge: '联结层', trigger: '迁移层'
+    };
+    const LAYER_SUBS = {
+        concept: '是什么 · 定义与辨析', proposition: '为什么 · 定理与证明', method: '怎么用 · 方法与迁移',
+        lens: '像什么 · 隐喻与警示', bridge: '连什么 · 跨学科锚点', trigger: '何时用 · 场景与拆包'
+    };
+    const LAYER_ICONS = {
+        concept: '📖', proposition: '📐', method: '🔧',
+        lens: '🔍', bridge: '🌉', trigger: '⚡'
+    };
+
+    let html = `
+<div class="page-header">
+    <h1>${frontmatter.title || frontmatter.name}</h1>
+    <div class="meta">${frontmatter.book || ''}</div>
+    <div class="tags-row">`;
+
+    if (frontmatter.tags) {
+        const tags = frontmatter.tags.replace(/[\[\]]/g, '').split(',').map(t => t.trim()).filter(Boolean);
+        tags.forEach(t => {
+            html += `<a href="concept.html?name=${encodeURIComponent(t)}" class="tag-badge ${frontmatter.tag_type === 'formal' ? 'formal' : 'intuitive'}">${t}</a>`;
+        });
+    }
+    html += `</div></div><div class="container">`;
+
+    sections.forEach(sec => {
+        const blocks = sec.blocks.map(b => renderBlock(b, sec.layer)).join('');
+        html += `
+<div class="layer layer-${sec.layer}" id="layer-${sec.layer}">
+    <div class="layer-header" onclick="toggleLayer('layer-${sec.layer}')">
+        <div class="layer-icon">${LAYER_ICONS[sec.layer]}</div>
+        <div class="layer-title">
+            <h2>${LAYER_NAMES[sec.layer]} <span class="layer-label">${sec.layer === 'concept' ? '概念' : sec.layer === 'proposition' ? '命题' : sec.layer === 'method' ? '方法' : sec.layer === 'lens' ? '直觉' : sec.layer === 'bridge' ? '直觉' : '直觉'}</span></h2>
+            <span class="subtitle">${LAYER_SUBS[sec.layer]}</span>
+        </div>
+        <span class="layer-toggle">+</span>
+    </div>
+    <div class="layer-body">${blocks}</div>
+</div>`;
+    });
+
+    html += '</div>';
+    return html;
+}
+
+function toggleLayer(id) {
+    document.getElementById(id).classList.toggle('expanded');
+}
+
+
+// ======== 主逻辑 ========
+async function load() {
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name');
+
+    if (!name) {
+        document.getElementById('app').innerHTML = '<div class="error-box"><h2>未指定概念</h2><p>请通过链接访问：<code>concept.html?name=函数</code></p></div>';
+        return;
+    }
+
+    document.title = name + ' — 知识卡片';
+    document.getElementById('breadcrumb').innerHTML = `<span>${name}</span>`;
+
+    // Try to fetch md file
+    const cardName = decodeURIComponent(name);
+    const cardFile = cardName + '.md';
+    // special filename mapping (only when card name differs from file name)
+    const FILENAME_MAP = {
+        'Δ语言': 'delta语言.md',
+    };
+    const filename = FILENAME_MAP[cardName] || cardFile;
+
+    try {
+        const res = await fetch('../../content/math/cards/' + filename);
+        if (!res.ok) throw new Error('not found');
+        const text = await res.text();
+        const data = parseMd(text);
+        document.getElementById('app').innerHTML = renderConceptPage(data);
+
+        // auto-expand first layer
+        const first = document.querySelector('.layer');
+        if (first) first.classList.add('expanded');
+
+        // update breadcrumb with module info
+        if (data.frontmatter.chain) {
+            document.getElementById('breadcrumb').innerHTML =
+                `<a href="index.html" class="back-link" style="font-size:13px">${data.frontmatter.chain}</a> <span>/</span> <span>${data.frontmatter.name}</span>`;
+        }
+    } catch (e) {
+        document.getElementById('app').innerHTML = `<div class="error-box">
+            <h2>无法加载「${escapeHtml(cardName)}」</h2>
+            <p>请确保以本地服务器方式打开（<code>python3 -m http.server</code>）</p>
+            <p style="margin-top:8px;color:#475569">文件路径：<code>../../content/math/cards/${escapeHtml(filename)}</code></p>
+            <p style="margin-top:6px;color:#475569;font-size:12px">提示：标签名需与卡片文件名完全一致</p>
+        </div>`;
+    }
+}
+
+load();
+</script>
+</body>
+</html>
