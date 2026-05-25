@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高中生物知识体系</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --radius: 12px;
+            --line-color: #e74c3c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.7; }
+
+        header { text-align: center; padding: 40px 20px 25px; }
+        h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: 0.12em; margin-bottom: 8px; background: linear-gradient(90deg, #e74c3c, #9b59b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+        .back-home { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.08); border-radius: 25px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; margin-bottom: 30px; transition: background 0.2s; }
+        .back-home:hover { background: rgba(255,255,255,0.15); color: var(--text-primary); }
+
+        .main-line { margin-bottom: 28px; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+        .main-line-header { display: flex; align-items: center; padding: 18px 22px; cursor: pointer; transition: background 0.25s; }
+        .main-line-header:hover { background: rgba(255,255,255,0.03); }
+        .main-line-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; background: linear-gradient(135deg, #e74c3c, #c0392b); }
+
+        .main-line-title { flex: 1; }
+        .main-line-title h2 { font-size: 1.05rem; font-weight: 500; margin-bottom: 3px; }
+        .main-line-title span { font-size: 0.72rem; color: var(--text-muted); }
+        .expand-icon { font-size: 1.3rem; color: var(--text-muted); transition: transform 0.3s; padding: 5px; }
+        .main-line.active .expand-icon { transform: rotate(45deg); }
+
+        .main-line-content { display: none; padding: 20px; border-top: 1px solid rgba(255,255,255,0.04); }
+        .main-line.active .main-line-content { display: block; }
+
+        .nodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .node-card { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 16px; border-left: 3px solid var(--line-color); cursor: pointer; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+        .node-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+
+        .node-card-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .node-card-title .arrow { color: var(--text-muted); font-size: 0.9rem; }
+        .node-card-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; }
+        .node-card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .node-card-tags span { background: rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; color: rgba(255,255,255,0.65); }
+
+        .coming-soon { display: flex; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-muted); font-size: 1rem; }
+        .coming-soon div { text-align: center; }
+        .coming-soon span { font-size: 2rem; margin-bottom: 15px; display: block; }
+
+        footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>高中生物知识体系</h1>
+        <p class="subtitle">细胞生物学 · 遗传学 · 稳态与调节 · 生物与环境</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-home">← 返回总览</a>
+
+        <!-- 主线① 细胞与代谢链 -->
+        <div class="main-line line-1">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🔬</div>
+                <div class="main-line-title">
+                    <h2>主线① 细胞与代谢链</h2>
+                    <span>细胞结构 → 细胞代谢 → 酶与ATP</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">细胞结构 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第一章</div>
+                        <div class="node-card-tags"><span>细胞膜</span><span>细胞器</span><span>细胞核</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">物质输入输出 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第四章</div>
+                        <div class="node-card-tags"><span>被动运输</span><span>主动运输</span><span>胞吞胞吐</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">酶与ATP <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第五章</div>
+                        <div class="node-card-tags"><span>酶本质</span><span>酶活性</span><span>ATP合成</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">细胞呼吸 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第五章</div>
+                        <div class="node-card-tags"><span>有氧呼吸</span><span>无氧呼吸</span><span>呼吸作用应用</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">光合作用 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第五章</div>
+                        <div class="node-card-tags"><span>光反应</span><span>暗反应</span><span>C3/C4植物</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线② 遗传与进化链 -->
+        <div class="main-line line-2">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🧬</div>
+                <div class="main-line-title">
+                    <h2>主线② 遗传与进化链</h2>
+                    <span>遗传基础 → 遗传规律 → 变异进化</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">DNA与基因 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第一章</div>
+                        <div class="node-card-tags"><span>DNA结构</span><span>DNA复制</span><span>基因表达</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">遗传规律 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第二章</div>
+                        <div class="node-card-tags"><span>分离定律</span><span>自由组合</span><span>连锁互换</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">伴性遗传 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第二章</div>
+                        <div class="node-card-tags"><span>红绿色盲</span><span>血友病</span><span>交叉遗传</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">变异 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第五章</div>
+                        <div class="node-card-tags"><span>基因突变</span><span>染色体变异</span><span>先天/后天</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">进化 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第六章</div>
+                        <div class="node-card-tags"><span>自然选择</span><span>基因频率</span><span>物种形成</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线③ 稳态与调节链 -->
+        <div class="main-line line-3">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🏛️</div>
+                <div class="main-line-title">
+                    <h2>主线③ 稳态与调节链</h2>
+                    <span>神经调节 → 体液调节 → 免疫调节</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">神经调节 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>反射弧</span><span>兴奋传导</span><span>突触传递</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">体液调节 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>激素</span><span>分级调节</span><span>反馈调节</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">免疫调节 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>非特异性免疫</span><span>特异性免疫</span><span>免疫失调</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">植物激素调节 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>生长素</span><span>顶端优势</span><span>其他激素</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线④ 生物与环境链 -->
+        <div class="main-line line-4">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🌍</div>
+                <div class="main-line-title">
+                    <h2>主线④ 生物与环境链</h2>
+                    <span>种群 → 群落 → 生态系统</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">种群 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags"><span>种群密度</span><span>增长模型</span><span>种间关系</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">群落 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags"><span>群落结构</span><span>演替</span><span>丰富度</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">生态系统 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags"><span>结构</span><span>能量流动</span><span>物质循环</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">生态环境 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags"><span>全球问题</span><span>生态保护</span><span>可持续发展</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线⑤ 生物技术与工程链 -->
+        <div class="main-line line-5">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🧪</div>
+                <div class="main-line-title">
+                    <h2>主线⑤ 生物技术与工程链</h2>
+                    <span>发酵工程 → 细胞工程 → 基因工程</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">微生物培养 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>培养基</span><span>无菌技术</span><span>计数</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">细胞工程 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修三</div>
+                        <div class="node-card-tags"><span>植物组培</span><span>动物细胞培养</span><span>体细胞克隆</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">基因工程 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修三</div>
+                        <div class="node-card-tags"><span>工具酶</span><span>载体</span><span>PCR技术</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">胚胎工程 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修三</div>
+                        <div class="node-card-tags"><span>受精</span><span>胚胎发育</span><span>胚胎移植</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="coming-soon">
+            <div>
+                <span>🔧</span>
+                <p>详细内容正在建设中...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>基于新课标教材整理 · 知识结构图</p>
+    </footer>
+
+    <script>
+        function toggleLine(line) {
+            line.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

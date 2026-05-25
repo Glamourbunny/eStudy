@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>力 - 高中物理概念</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --radius: 12px;
+            --accent-color: #3498db;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.8; }
+
+        header { text-align: center; padding: 40px 20px 25px; }
+        h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: 0.12em; margin-bottom: 8px; background: linear-gradient(90deg, #3498db, #e94560); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+        .back-home { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.08); border-radius: 25px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; margin-bottom: 30px; transition: background 0.2s; }
+        .back-home:hover { background: rgba(255,255,255,0.15); color: var(--text-primary); }
+
+        .concept-section { margin-bottom: 35px; }
+        .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+        .section-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .section-icon.intuition { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .section-icon.quantitative { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .section-icon.dual { background: linear-gradient(135deg, #e94560, #c0392b); }
+        .section-icon.boundary { background: linear-gradient(135deg, #f39c12, #d35400); }
+        .section-icon.cross { background: linear-gradient(135deg, #1abc9c, #16a085); }
+
+        .section-title { font-size: 1.15rem; font-weight: 500; }
+        .section-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-left: auto; }
+
+        .content-card { background: var(--bg-card); border-radius: var(--radius); padding: 22px; border: 1px solid rgba(255,255,255,0.06); }
+        .content-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: 12px; color: var(--text-secondary); }
+        .content-card p { margin-bottom: 12px; font-size: 0.95rem; }
+        .content-card ul { padding-left: 20px; margin-bottom: 12px; }
+        .content-card li { margin-bottom: 8px; font-size: 0.95rem; }
+
+        .formula { background: rgba(255,255,255,0.08); padding: 10px 16px; border-radius: 8px; font-family: "Times New Roman", serif; font-size: 1.1rem; margin: 12px 0; display: inline-block; }
+        .highlight { color: #3498db; font-weight: 500; }
+
+        .summary-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .summary-table th, .summary-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .summary-table th { background: rgba(255,255,255,0.05); color: var(--text-secondary); font-weight: 500; }
+        .summary-table td:first-child { font-weight: 500; color: var(--accent-color); width: 120px; }
+
+        .simulation-section { background: var(--bg-card); border-radius: var(--radius); padding: 22px; border: 1px solid rgba(255,255,255,0.06); }
+        .simulation-section h3 { font-size: 1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .code-block { background: #0d1117; border-radius: 8px; padding: 18px; overflow-x: auto; font-family: "Consolas", "Monaco", monospace; font-size: 0.85rem; line-height: 1.6; }
+        .code-block .comment { color: #6a737d; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .function { color: #d2a8ff; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .number { color: #79c0ff; }
+
+        .traps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 15px; }
+        .trap-item { background: rgba(231, 76, 60, 0.1); border-left: 3px solid #e74c3c; padding: 14px; border-radius: 8px; }
+        .trap-item.wrong { border-left-color: #e74c3c; }
+        .trap-item.right { border-left-color: #27ae60; background: rgba(39, 174, 96, 0.1); }
+        .trap-item .label { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block; }
+        .trap-item.wrong .label { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .trap-item.right .label { background: rgba(39, 174, 96, 0.2); color: #27ae60; }
+        .trap-item p { font-size: 0.9rem; margin: 0; }
+
+        footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>力（性质力 vs 效果力）</h1>
+        <p class="subtitle">Force · 受力分析不重复、不遗漏的根基</p>
+    </header>
+
+    <div class="container">
+        <a href="physics-index.html" class="back-home">← 返回物理体系</a>
+
+        <!-- 概念层 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon intuition">💡</div>
+                <h2 class="section-title">直觉与动态仿真锚</h2>
+                <span class="section-subtitle">生活直觉 → 可视化图景</span>
+            </div>
+            <div class="content-card">
+                <h3>生活现实直觉</h3>
+                <ul>
+                    <li><span class="highlight">推箱子</span>时感到费力——这就是力的大小感受</li>
+                    <li><span class="highlight">手被锤子打到</span>会痛——压力的直觉</li>
+                    <li><span class="highlight">磁铁吸引铁钉</span>——不接触也有力（场力）</li>
+                </ul>
+
+                <h3>静态与动态图像</h3>
+                <ul>
+                    <li><strong>力是矢量</strong>：箭头表示方向，长度表示大小</li>
+                    <li><strong>弹簧被拉长/压缩</strong>：弹力的直观图景</li>
+                    <li><strong>VPython仿真</strong>：展示多个力合成平移变化</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon quantitative">📐</div>
+                <h2 class="section-title">定量与代数工具锚</h2>
+                <span class="section-subtitle">实验测量 → 公式体系</span>
+            </div>
+            <div class="content-card">
+                <h3>实验操作锚定</h3>
+                <ul>
+                    <li><strong>弹簧测力计</strong>：利用弹力与形变量正比关系</li>
+                    <li><strong>压力传感器</strong>：应变片形变→电信号</li>
+                    <li><strong>DIS实验</strong>：力传感器实时采集数据</li>
+                </ul>
+
+                <h3>严格形式化公式</h3>
+                <p><strong>牛顿第二定律：</strong></p>
+                <div class="formula">F = ma</div>
+
+                <p><strong>性质力分类：</strong></p>
+                <ul>
+                    <li><strong>重力：</strong><span class="formula">G = mg</span></li>
+                    <li><strong>弹力：</strong><span class="formula">F = -kx</span> （胡克定律）</li>
+                    <li><strong>摩擦力：</strong><span class="formula">f = μN</span></li>
+                    <li><strong>万有引力：</strong><span class="formula">F = GMm/r²</span></li>
+                    <li><strong>电场力：</strong><span class="formula">F = qE</span></li>
+                    <li><strong>洛伦兹力：</strong><span class="formula">F = qvBsinθ</span></li>
+                </ul>
+
+                <h3>代数空间解耦</h3>
+                <ul>
+                    <li><strong>正交分解</strong>：将斜面上的力分解为垂直和平行于斜面的分力</li>
+                    <li><strong>坐标系的选取</strong>决定解题难度</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 命题层 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon dual">⚖️</div>
+                <h2 class="section-title">对偶与网络错觉锚</h2>
+                <span class="section-subtitle">击碎直觉陷阱</span>
+            </div>
+            <div class="content-card">
+                <h3>经典对偶配对：性质力 vs 效果力</h3>
+                <table class="summary-table">
+                    <tr><th>性质力</th><th>效果力</th></tr>
+                    <tr><td>重力、弹力、摩擦力...</td><td>向心力、回复力、下滑力...</td></tr>
+                    <tr><td>按本质来源分类</td><td>按作用效果命名</td></tr>
+                    <tr><td>不能从受力图上消失</td><td>可以分解或合成得到</td></tr>
+                </table>
+
+                <h3>击碎考场错觉</h3>
+                <div class="traps-grid">
+                    <div class="trap-item wrong">
+                        <span class="label">❌ 常见误区</span>
+                        <p>向心力是一种新的力</p>
+                    </div>
+                    <div class="trap-item right">
+                        <span class="label">✓ 真相</span>
+                        <p>向心力是效果力，是其他力的合力或分力，指向圆心</p>
+                    </div>
+                </div>
+                <div class="traps-grid" style="margin-top: 14px;">
+                    <div class="trap-item wrong">
+                        <span class="label">❌ 常见误区</span>
+                        <p>下滑力是一种新的力</p>
+                    </div>
+                    <div class="trap-item right">
+                        <span class="label">✓ 真相</span>
+                        <p>下滑力是重力沿斜面分力，属于重力的效果</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon boundary">🎯</div>
+                <h2 class="section-title">边界与考场临界锚</h2>
+                <span class="section-subtitle">失效边界 → 临界状态</span>
+            </div>
+            <div class="content-card">
+                <h3>失效边界</h3>
+                <ul>
+                    <li><strong>摩擦力</strong>：当接触面光滑时，μ = 0</li>
+                    <li><strong>弹簧弹力</strong>：超过弹性限度，胡克定律失效，F = -kx 变为非线性</li>
+                </ul>
+
+                <h3>临界状态识别</h3>
+                <ul>
+                    <li><strong>静摩擦力刚被推动瞬间</strong>：$f_{静} \to f_{最大}$，此时 a = 0</li>
+                    <li><strong>分离临界</strong>：两物体刚好分离时，弹力 N = 0，但加速度相同</li>
+                    <li><strong>绳模型 vs 轻杆模型</strong>：绳只能拉不能推</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 方法层 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon cross">🌐</div>
+                <h2 class="section-title">跨学科网络同构锚</h2>
+                <span class="section-subtitle">前置 → 后继 → 跨学科</span>
+            </div>
+            <div class="content-card">
+                <h3>概念网络</h3>
+                <p><strong>前置概念：</strong>加速度、质量</p>
+                <p><strong>后继概念：</strong>牛顿第二定律、动能定理、动量守恒、功能关系</p>
+
+                <h3>公式网络</h3>
+                <ul>
+                    <li><span class="formula">F合 = ma</span> （核心方程）</li>
+                    <li><span class="formula">F合 = dp/dt</span> （动量定理的微分形式）</li>
+                    <li><span class="formula">W = F·x·cosθ</span> （功的定义）</li>
+                    <li><span class="formula">P = F·v</span> （功率）</li>
+                </ul>
+
+                <h3>物理内同构</h3>
+                <ul>
+                    <li>重力场与电场高度相似：g 类似于 qE/m</li>
+                    <li>引力场与库仑场：$F = GMm/r²$ vs $F = kq_1q_2/r²$</li>
+                </ul>
+
+                <h3>物化生联动</h3>
+                <ul>
+                    <li><strong>化学</strong>：化学键本质是电磁力</li>
+                    <li><strong>生物</strong>：肌肉收缩是拉力（弹力），骨骼支撑是压力（弹力）</li>
+                    <li><strong>医学</strong>：血压对血管壁的切应力</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 卡片总结 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon intuition">📋</div>
+                <h2 class="section-title">五维锚定总结</h2>
+            </div>
+            <div class="content-card">
+                <table class="summary-table">
+                    <tr><th>维度</th><th>内容</th></tr>
+                    <tr><td>直觉锚</td><td>推箱子、手被锤子打到、磁铁吸铁钉</td></tr>
+                    <tr><td>定量锚</td><td>F = ma（矢量），按性质分类</td></tr>
+                    <tr><td>对偶锚</td><td>性质力（来源）vs 效果力（名称）</td></tr>
+                    <tr><td>边界锚</td><td>摩擦系数、弹性限度、绳只能拉</td></tr>
+                    <tr><td>跨学科锚</td><td>肌肉拉力本质是弹力</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 计算机演示 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon cross">💻</div>
+                <h2 class="section-title">计算机仿真演示</h2>
+            </div>
+            <div class="simulation-section">
+                <h3>Python 代码：力的合成与分解仿真</h3>
+                <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="keyword">def</span> <span class="function">simulate_force_resolution</span>():
+    <span class="string">"""模拟斜面上力的分解"""</span>
+    fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">14</span>, <span class="number">6</span>))
+
+    <span class="comment"># 参数设置</span>
+    m = <span class="number">5</span>  <span class="comment"># kg</span>
+    g = <span class="number">9.8</span>  <span class="comment"># m/s²</span>
+    theta = <span class="number">30</span>  <span class="comment"># 度</span>
+
+    <span class="comment"># 重力</span>
+    G = m * g
+
+    <span class="comment"># 分解</span>
+    G_parallel = G * np.sin(np.radians(theta))  <span class="comment"># 沿斜面向下</span>
+    G_perpendicular = G * np.cos(np.radians(theta))  <span class="comment"># 垂直斜面</span>
+
+    <span class="comment"># 画图：斜面分解</span>
+    ax1 = axes[<span class="number">0</span>]
+    ax1.set_xlim(-<span class="number">1</span>, <span class="number">10</span>)
+    ax1.set_ylim(-<span class="number">1</span>, <span class="number">10</span>)
+    ax1.set_aspect(<span class="string">'equal'</span>)
+    ax1.axis(<span class="string">'off'</span>)
+
+    <span class="comment"># 绘制斜面</span>
+    slope = np.tan(np.radians(theta))
+    x_slope = np.linspace(<span class="number">0</span>, <span class="number">8</span>, <span class="number">100</span>)
+    y_slope = slope * x_slope
+    ax1.fill_between(x_slope, <span class="number">0</span>, y_slope, alpha=<span class="number">0.3</span>, color=<span class="string">'gray'</span>)
+
+    <span class="comment"># 物块位置</span>
+    block_x, block_y = <span class="number">4</span>, slope * <span class="number">4</span>
+    ax1.plot(block_x, block_y, <span class="string">'ko'</span>, markersize=<span class="number">20</span>, fillstyle=<span class="string">'none'</span>)
+
+    <span class="comment"># 重力 G（竖直向下）</span>
+    ax1.annotate(<span class="string">''</span>, xy=(block_x, block_y - <span class="number">3</span>), xytext=(block_x, block_y),
+                 arrowprops=dict(arrowstyle=<span class="string">'->'</span>, color=<span class="string">'red'</span>, lw=<span class="number">2</span>))
+    ax1.text(block_x + <span class="number">0.3</span>, block_y - <span class="number">1.5</span>, <span class="string">f'G = {G:.1f}N'</span>, color=<span class="string">'red'</span>)
+
+    <span class="comment"># 分解力：沿斜面 G_parallel（蓝色）</span>
+    direction = np.array([np.cos(np.radians(theta)), np.sin(np.radians(theta))])
+    ax1.annotate(<span class="string">''</span>, xy=(block_x + <span class="number">2.5</span>*direction[<span class="number">0</span>], block_y + <span class="number">2.5</span>*direction[<span class="number">1</span>]),
+                 xytext=(block_x, block_y),
+                 arrowprops=dict(arrowstyle=<span class="string">'->'</span>, color=<span class="string">'blue'</span>, lw=<span class="number">2</span>))
+
+    <span class="comment"># 分解力：垂直斜面 G_perpendicular（绿色）</span>
+    perp_direction = np.array([-np.sin(np.radians(theta)), np.cos(np.radians(theta))])
+    ax1.annotate(<span class="string">''</span>, xy=(block_x + <span class="number">2</span>*perp_direction[<span class="number">0</span>], block_y + <span class="number">2</span>*perp_direction[<span class="number">1</span>]),
+                 xytext=(block_x, block_y),
+                 arrowprops=dict(arrowstyle=<span class="string">'->'</span>, color=<span class="string">'green'</span>, lw=<span class="number">2</span>))
+
+    ax1.set_title(<span class="string">'斜面上力的分解：G₁ = Gsinθ, G₂ = Gcosθ'</span>)
+
+    <span class="keyword">print</span>(<span class="string">f"G = {G}N, G₁ = {G_parallel:.1f}N (沿斜面), G₂ = {G_perpendicular:.1f}N (垂直斜面)"</span>)
+
+simulate_force_resolution()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>五维锚定法 · 物理概念卡片</p>
+    </footer>
+</body>
+</html>

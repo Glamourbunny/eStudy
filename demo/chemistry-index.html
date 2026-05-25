@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高中化学知识体系</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --radius: 12px;
+            --line-color: #2ecc71;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.7; }
+
+        header { text-align: center; padding: 40px 20px 25px; }
+        h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: 0.12em; margin-bottom: 8px; background: linear-gradient(90deg, #2ecc71, #f39c12); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+        .back-home { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.08); border-radius: 25px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; margin-bottom: 30px; transition: background 0.2s; }
+        .back-home:hover { background: rgba(255,255,255,0.15); color: var(--text-primary); }
+
+        .main-line { margin-bottom: 28px; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+        .main-line-header { display: flex; align-items: center; padding: 18px 22px; cursor: pointer; transition: background 0.25s; }
+        .main-line-header:hover { background: rgba(255,255,255,0.03); }
+        .main-line-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+        .main-line-title { flex: 1; }
+        .main-line-title h2 { font-size: 1.05rem; font-weight: 500; margin-bottom: 3px; }
+        .main-line-title span { font-size: 0.72rem; color: var(--text-muted); }
+        .expand-icon { font-size: 1.3rem; color: var(--text-muted); transition: transform 0.3s; padding: 5px; }
+        .main-line.active .expand-icon { transform: rotate(45deg); }
+
+        .main-line-content { display: none; padding: 20px; border-top: 1px solid rgba(255,255,255,0.04); }
+        .main-line.active .main-line-content { display: block; }
+
+        .nodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .node-card { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 16px; border-left: 3px solid var(--line-color); cursor: pointer; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+        .node-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+
+        .node-card-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .node-card-title .arrow { color: var(--text-muted); font-size: 0.9rem; }
+        .node-card-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; }
+        .node-card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .node-card-tags span { background: rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; color: rgba(255,255,255,0.65); }
+
+        .coming-soon { display: flex; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-muted); font-size: 1rem; }
+        .coming-soon div { text-align: center; }
+        .coming-soon span { font-size: 2rem; margin-bottom: 15px; display: block; }
+
+        footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>高中化学知识体系</h1>
+        <p class="subtitle">物质结构 · 反应原理 · 元素化合物 · 有机化学</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-home">← 返回总览</a>
+
+        <!-- 主线① 物质结构链 -->
+        <div class="main-line line-1">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">⚛️</div>
+                <div class="main-line-title">
+                    <h2>主线① 物质结构链</h2>
+                    <span>原子结构 → 分子结构 → 晶体结构</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">原子结构 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第一册</div>
+                        <div class="node-card-tags"><span>原子核</span><span>电子排布</span><span>离子键</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">分子结构 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第一册</div>
+                        <div class="node-card-tags"><span>共价键</span><span>分子构型</span><span>杂化轨道</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">晶体结构 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修二</div>
+                        <div class="node-card-tags"><span>四种晶体</span><span>配位数</span><span>熔沸点</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线② 反应原理链 -->
+        <div class="main-line line-2">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">⚖️</div>
+                <div class="main-line-title">
+                    <h2>主线② 反应原理链</h2>
+                    <span>化学速率 → 化学平衡 → 电离平衡 → 溶解平衡</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">化学反应速率 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>速率计算</span><span>影响因素</span><span>碰撞理论</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">化学平衡 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>平衡常数</span><span>勒夏特列</span><span>转化率</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">水溶液平衡 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>电离</span><span>pH计算</span><span>盐类水解</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">沉淀溶解平衡 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>Ksp</span><span>沉淀转化</span><span>离子浓度</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线③ 元素化合物链 -->
+        <div class="main-line line-3">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🧪</div>
+                <div class="main-line-title">
+                    <h2>主线③ 元素化合物链</h2>
+                    <span>金属 → 非金属 → 元素周期律</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">钠及其化合物 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第一册</div>
+                        <div class="node-card-tags"><span>Na₂O</span><span>NaOH</span><span>Na₂CO₃</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">铝及其化合物 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第一册</div>
+                        <div class="node-card-tags"><span>Al₂O₃</span><span>Al(OH)₃</span><span>明矾</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">铁及其化合物 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第一册</div>
+                        <div class="node-card-tags"><span>Fe</span><span>Fe²⁺/Fe³⁺</span><span>铁氧体</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">氯及其化合物 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第一册</div>
+                        <div class="node-card-tags"><span>Cl₂</span><span>HCl</span><span>HClO</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">硫及其化合物 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第二册</div>
+                        <div class="node-card-tags"><span>SO₂</span><span>H₂SO₄</span><span>硫酸根</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">氮及其化合物 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第二册</div>
+                        <div class="node-card-tags"><span>NH₃</span><span>NO/NO₂</span><span>HNO₃</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线④ 有机化学链 -->
+        <div class="main-line line-4">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🔗</div>
+                <div class="main-line-title">
+                    <h2>主线④ 有机化学链</h2>
+                    <span>官能团 → 反应类型 → 合成路线</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">烃 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第二册</div>
+                        <div class="node-card-tags"><span>烷烃</span><span>烯烃</span><span>炔烃</span><span>芳香烃</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">衍生物 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第二册</div>
+                        <div class="node-card-tags"><span>卤代烃</span><span>醇</span><span>醛</span><span>羧酸</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">高分子 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第二册 / 选择性必修三</div>
+                        <div class="node-card-tags"><span>加聚</span><span>缩聚</span><span>单体</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">同分异构体 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第二册</div>
+                        <div class="node-card-tags"><span>碳链异构</span><span>位置异构</span><span>官能团异构</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线⑤ 实验方法链 -->
+        <div class="main-line line-5">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🧫</div>
+                <div class="main-line-title">
+                    <h2>主线⑤ 实验方法链</h2>
+                    <span>分离提纯 → 检验鉴别 → 定量分析</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">物质分离提纯 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第一册/必修第二册</div>
+                        <div class="node-card-tags"><span>蒸馏</span><span>萃取</span><span>结晶</span><span>层析</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">离子检验 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修第一册</div>
+                        <div class="node-card-tags"><span>Cl⁻</span><span>SO₄²⁻</span><span>Fe²⁺/Fe³⁺</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">定量分析 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>滴定</span><span>沉淀法</span><span>质量分数</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="coming-soon">
+            <div>
+                <span>🔧</span>
+                <p>详细内容正在建设中...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>基于新课标教材整理 · 知识结构图</p>
+    </footer>
+
+    <script>
+        function toggleLine(line) {
+            line.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

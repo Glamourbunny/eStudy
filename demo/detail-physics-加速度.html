@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加速度 - 高中物理概念</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --radius: 12px;
+            --accent-color: #3498db;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.8; }
+
+        header { text-align: center; padding: 40px 20px 25px; }
+        h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: 0.12em; margin-bottom: 8px; background: linear-gradient(90deg, #3498db, #e94560); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+        .back-home { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.08); border-radius: 25px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; margin-bottom: 30px; transition: background 0.2s; }
+        .back-home:hover { background: rgba(255,255,255,0.15); color: var(--text-primary); }
+
+        .concept-section { margin-bottom: 35px; }
+        .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+        .section-icon { width: 38px; height: 38px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+        .section-icon.intuition { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .section-icon.quantitative { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .section-icon.dual { background: linear-gradient(135deg, #e94560, #c0392b); }
+        .section-icon.boundary { background: linear-gradient(135deg, #f39c12, #d35400); }
+        .section-icon.cross { background: linear-gradient(135deg, #1abc9c, #16a085); }
+
+        .section-title { font-size: 1.15rem; font-weight: 500; }
+        .section-subtitle { font-size: 0.8rem; color: var(--text-muted); margin-left: auto; }
+
+        .content-card { background: var(--bg-card); border-radius: var(--radius); padding: 22px; border: 1px solid rgba(255,255,255,0.06); }
+        .content-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: 12px; color: var(--text-secondary); }
+        .content-card p { margin-bottom: 12px; font-size: 0.95rem; }
+        .content-card ul { padding-left: 20px; margin-bottom: 12px; }
+        .content-card li { margin-bottom: 8px; font-size: 0.95rem; }
+
+        .formula { background: rgba(255,255,255,0.08); padding: 10px 16px; border-radius: 8px; font-family: "Times New Roman", serif; font-size: 1.1rem; margin: 12px 0; display: inline-block; }
+        .highlight { color: #3498db; font-weight: 500; }
+
+        .summary-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .summary-table th, .summary-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.06); }
+        .summary-table th { background: rgba(255,255,255,0.05); color: var(--text-secondary); font-weight: 500; }
+        .summary-table td:first-child { font-weight: 500; color: var(--accent-color); width: 120px; }
+
+        .simulation-section { background: var(--bg-card); border-radius: var(--radius); padding: 22px; border: 1px solid rgba(255,255,255,0.06); }
+        .simulation-section h3 { font-size: 1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .code-block { background: #0d1117; border-radius: 8px; padding: 18px; overflow-x: auto; font-family: "Consolas", "Monaco", monospace; font-size: 0.85rem; line-height: 1.6; }
+        .code-block .comment { color: #6a737d; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .function { color: #d2a8ff; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .number { color: #79c0ff; }
+
+        .traps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 15px; }
+        .trap-item { background: rgba(231, 76, 60, 0.1); border-left: 3px solid #e74c3c; padding: 14px; border-radius: 8px; }
+        .trap-item.wrong { border-left-color: #e74c3c; }
+        .trap-item.right { border-left-color: #27ae60; background: rgba(39, 174, 96, 0.1); }
+        .trap-item .label { font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block; }
+        .trap-item.wrong .label { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .trap-item.right .label { background: rgba(39, 174, 96, 0.2); color: #27ae60; }
+        .trap-item p { font-size: 0.9rem; margin: 0; }
+
+        footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>加速度</h1>
+        <p class="subtitle">Acceleration · 连接运动学与动力学的唯一桥梁</p>
+    </header>
+
+    <div class="container">
+        <a href="physics-index.html" class="back-home">← 返回物理体系</a>
+
+        <!-- 概念层 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon intuition">💡</div>
+                <h2 class="section-title">直觉与动态仿真锚</h2>
+                <span class="section-subtitle">生活直觉 → 可视化图景</span>
+            </div>
+            <div class="content-card">
+                <h3>生活现实直觉</h3>
+                <ul>
+                    <li><span class="highlight">推背感</span>：车辆绿灯起步时窜出去的劲儿，加速度就是"推背感"的量化</li>
+                    <li><span class="highlight">速度变化快慢</span>：砰的一下从0到100km/h，加速度大；慢慢悠悠才到60km/h，加速度小</li>
+                </ul>
+
+                <h3>静态与动态图像</h3>
+                <ul>
+                    <li><strong>v-t图像</strong>：加速度是<span class="highlight">斜率</span>——曲线说明加速度在变化</li>
+                    <li><strong>a-t图像</strong>：加速度与时间轴围成的<span class="highlight">面积</span> = 速度变化量</li>
+                    <li><strong>Python仿真</strong>：模拟汽车起步、小球滚落、电梯升降的加速度变化</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon quantitative">📐</div>
+                <h2 class="section-title">定量与代数工具锚</h2>
+                <span class="section-subtitle">实验测量 → 公式体系</span>
+            </div>
+            <div class="content-card">
+                <h3>实验操作锚定</h3>
+                <ul>
+                    <li><strong>光电门计时器</strong>：测遮光时间，结合速度传感器测瞬时速度</li>
+                    <li><strong>打点计时器/电火花计时器</strong>：测位移，计算加速度</li>
+                </ul>
+
+                <h3>严格形式化公式</h3>
+                <p><strong>比值定义式：</strong></p>
+                <div class="formula">a = Δv / Δt （加速度是速度变化率）</div>
+
+                <p><strong>决定式：</strong>由牛顿第二定律 $F = ma$ 决定</p>
+                <div class="formula">a = F合 / m （加速度由合力和质量共同决定）</div>
+
+                <h3>代数空间解耦</h3>
+                <ul>
+                    <li><strong>矢量性</strong>：方向与合外力方向相同，与速度方向无关</li>
+                    <li><strong>典型分解</strong>：斜面上下滑时，$a = g\sin\theta$，方向沿斜面向下</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 命题层 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon dual">⚖️</div>
+                <h2 class="section-title">对偶与网络错觉锚</h2>
+                <span class="section-subtitle">击碎直觉陷阱</span>
+            </div>
+            <div class="content-card">
+                <h3>经典对偶配对：v vs a</h3>
+                <table class="summary-table">
+                    <tr><th>v（速度）</th><th>a（加速度）</th></tr>
+                    <tr><td>描述运动状态</td><td>描述状态变化快慢</td></tr>
+                    <tr><td>速度大≠加速度大</td><td>加速度大≠速度大</td></tr>
+                    <tr><td>方向与运动方向相同</td><td>方向与合外力方向相同</td></tr>
+                </table>
+
+                <h3>击碎考场错觉</h3>
+                <div class="traps-grid">
+                    <div class="trap-item wrong">
+                        <span class="label">❌ 常见误区</span>
+                        <p>速度大，加速度就一定大</p>
+                    </div>
+                    <div class="trap-item right">
+                        <span class="label">✓ 真相</span>
+                        <p>火箭发射瞬间 v=0 但 a 极大；匀速飞行的子弹 v 极大但 a=0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon boundary">🎯</div>
+                <h2 class="section-title">边界与考场临界锚</h2>
+                <span class="section-subtitle">失效边界 → 临界状态</span>
+            </div>
+            <div class="content-card">
+                <h3>失效边界</h3>
+                <ul>
+                    <li>当 <span class="highlight">Δt → 0</span> 时，$a = dv/dt$ 变为瞬时加速度</li>
+                    <li>现实中无法真正测得 Δt = 0，但可近似</li>
+                </ul>
+
+                <h3>临界状态识别</h3>
+                <ul>
+                    <li><strong>竖直上抛最高点</strong>：v=0，但加速度 g 仍存在</li>
+                    <li><strong>弹簧振子平衡位置</strong>：a=0，此时速度最大</li>
+                    <li><strong>圆周运动最高点</strong>：$v_{min} = \sqrt{gr}$，此刻 a=g 竖直向下</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 方法层 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon cross">🌐</div>
+                <h2 class="section-title">跨学科网络同构锚</h2>
+                <span class="section-subtitle">前置 → 后继 → 跨学科</span>
+            </div>
+            <div class="content-card">
+                <h3>概念网络</h3>
+                <p><strong>前置概念：</strong>速度、力</p>
+                <p><strong>后继概念：</strong>牛顿第二定律、动能定理、动量</p>
+
+                <h3>公式网络</h3>
+                <ul>
+                    <li><span class="formula">a = F合/m</span> （牛顿第二定律的加速度）</li>
+                    <li><span class="formula">a = dv/dt</span> （运动学定义）</li>
+                    <li><span class="formula">a = (v² - v₀²) / 2x</span> （位移-速度关系）</li>
+                </ul>
+
+                <h3>物理内同构</h3>
+                <ul>
+                    <li>重力加速度 g 与电场加速度 $a = qE/m$ <span class="highlight">同构</span></li>
+                    <li>都可以用"单位质量的力"来理解</li>
+                </ul>
+
+                <h3>物化生联动</h3>
+                <ul>
+                    <li><strong>生理学</strong>：血压流速变化率——类似于加速度概念</li>
+                    <li><strong>化学</strong>：反应速率变化率——类似于加速度</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 卡片总结 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon intuition">📋</div>
+                <h2 class="section-title">五维锚定总结</h2>
+            </div>
+            <div class="content-card">
+                <table class="summary-table">
+                    <tr><th>维度</th><th>内容</th></tr>
+                    <tr><td>直觉锚</td><td>推背感、速度变化快慢</td></tr>
+                    <tr><td>定量锚</td><td>a = Δv/Δt，矢量</td></tr>
+                    <tr><td>对偶锚</td><td>v vs a，速度大≠加速度大</td></tr>
+                    <tr><td>边界锚</td><td>v=0时a≠0（最高点）</td></tr>
+                    <tr><td>跨学科锚</td><td>与生理反应速率同构</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 计算机演示 -->
+        <div class="concept-section">
+            <div class="section-header">
+                <div class="section-icon cross">💻</div>
+                <h2 class="section-title">计算机仿真演示</h2>
+            </div>
+            <div class="simulation-section">
+                <h3>Python 代码：汽车起步加速度仿真</h3>
+                <div class="code-block">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt
+
+<span class="keyword">def</span> <span class="function">simulate_acceleration</span>():
+    <span class="string">"""模拟汽车起步过程的加速度变化"""</span>
+    t = np.linspace(<span class="number">0</span>, <span class="number">10</span>, <span class="number">1000</span>)
+
+    <span class="comment"># scenario 1: 缓慢起步</span>
+    v1 = <span class="number">10</span> * (<span class="number">1</span> - np.exp(-t))  <span class="comment"># 指数增长到达终速</span>
+
+    <span class="comment"># scenario 2: 快速起步</span>
+    v2 = <span class="number">30</span> * (<span class="number">1</span> - np.exp(-t))
+
+    <span class="comment"># 计算加速度 (数值导数)</span>
+    a1 = np.gradient(v1, t)
+    a2 = np.gradient(v2, t)
+
+    fig, axes = plt.subplots(<span class="number">2</span>, <span class="number">1</span>, figsize=(<span class="number">10</span>, <span class="number">8</span>))
+
+    <span class="comment"># 速度图像</span>
+    axes[<span class="number">0</span>].plot(t, v1, <span class="string">'b-'</span>, label=<span class="string">'缓慢起步'</span>, linewidth=<span class="number">2</span>)
+    axes[<span class="number">0</span>].plot(t, v2, <span class="string">'r-'</span>, label=<span class="string">'快速起步'</span>, linewidth=<span class="number">2</span>)
+    axes[<span class="number">0</span>].set_xlabel(<span class="string">'时间 (s)'</span>)
+    axes[<span class="number">0</span>].set_ylabel(<span class="string">'速度 (m/s)'</span>)
+    axes[<span class="number">0</span>].set_title(<span class="string">'v-t 图像：加速度 = 斜率'</span>)
+    axes[<span class="number">0</span>].legend()
+    axes[<span class="number">0</span>].grid(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)
+
+    <span class="comment"># 加速度图像</span>
+    axes[<span class="number">1</span>].plot(t, a1, <span class="string">'b-'</span>, label=<span class="string">'缓慢起步'</span>, linewidth=<span class="number">2</span>)
+    axes[<span class="number">1</span>].plot(t, a2, <span class="string">'r-'</span>, label=<span class="string">'快速起步'</span>, linewidth=<span class="number">2</span>)
+    axes[<span class="number">1</span>].set_xlabel(<span class="string">'时间 (s)'</span>)
+    axes[<span class="number">1</span>].set_ylabel(<span class="string">'加速度 (m/s²)'</span>)
+    axes[<span class="number">1</span>].set_title(<span class="string">'a-t 图像：加速度 = 速度的导数'</span>)
+    axes[<span class="number">1</span>].legend()
+    axes[<span class="number">1</span>].grid(<span class="keyword">True</span>, alpha=<span class="number">0.3</span>)
+    axes[<span class="number">1</span>].axhline(y=<span class="number">0</span>, color=<span class="string">'k'</span>, linestyle=<span class="string">'-'</span>, linewidth=<span class="number">0.5</span>)
+
+    plt.tight_layout()
+    plt.savefig(<span class="string">'acceleration_car_start.png'</span>, dpi=<span class="number">150</span>)
+    plt.show()
+
+    <span class="keyword">print</span>(<span class="string">"关键观察：加速度在起步瞬间最大，随时间减小"</span>)
+
+simulate_acceleration()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>五维锚定法 · 物理概念卡片</p>
+    </footer>
+</body>
+</html>

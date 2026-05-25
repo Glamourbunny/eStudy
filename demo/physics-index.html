@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高中物理知识体系</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --radius: 12px;
+            --line-color: #3498db;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.7; }
+
+        header { text-align: center; padding: 40px 20px 25px; }
+        h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: 0.12em; margin-bottom: 8px; background: linear-gradient(90deg, #3498db, #9b59b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+        .back-home { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.08); border-radius: 25px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; margin-bottom: 30px; transition: background 0.2s; }
+        .back-home:hover { background: rgba(255,255,255,0.15); color: var(--text-primary); }
+
+        .main-line { margin-bottom: 28px; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+        .main-line-header { display: flex; align-items: center; padding: 18px 22px; cursor: pointer; transition: background 0.25s; }
+        .main-line-header:hover { background: rgba(255,255,255,0.03); }
+        .main-line-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; background: linear-gradient(135deg, #3498db, #9b59b6); }
+
+        .main-line-title { flex: 1; }
+        .main-line-title h2 { font-size: 1.05rem; font-weight: 500; margin-bottom: 3px; }
+        .main-line-title span { font-size: 0.72rem; color: var(--text-muted); }
+        .expand-icon { font-size: 1.3rem; color: var(--text-muted); transition: transform 0.3s; padding: 5px; }
+        .main-line.active .expand-icon { transform: rotate(45deg); }
+
+        .main-line-content { display: none; padding: 20px; border-top: 1px solid rgba(255,255,255,0.04); }
+        .main-line.active .main-line-content { display: block; }
+
+        .nodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .node-card { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 16px; border-left: 3px solid var(--line-color); cursor: pointer; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+        .node-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+
+        .node-card-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .node-card-title .arrow { color: var(--text-muted); font-size: 0.9rem; }
+        .node-card-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; }
+        .node-card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .node-card-tags span { background: rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; color: rgba(255,255,255,0.65); }
+
+        .coming-soon { display: flex; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-muted); font-size: 1rem; }
+        .coming-soon span { font-size: 2rem; margin-bottom: 15px; }
+
+        footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>高中物理知识体系</h1>
+        <p class="subtitle">力学 · 电磁学 · 热学 · 光学 · 原子物理</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-home">← 返回总览</a>
+
+        <!-- 主线① 力学链 -->
+        <div class="main-line line-1">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">⚙️</div>
+                <div class="main-line-title">
+                    <h2>主线① 力学链</h2>
+                    <span>运动描述 → 力与运动 → 能量 → 动量</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">运动的描述 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第一章</div>
+                        <div class="node-card-tags"><span>位移</span><span>速度</span><span>加速度</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">力与相互作用 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第三章</div>
+                        <div class="node-card-tags"><span>重力</span><span>弹力</span><span>摩擦力</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">牛顿运动定律 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 · 第四章</div>
+                        <div class="node-card-tags"><span>牛顿三定律</span><span>超重失重</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">曲线运动 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第五章</div>
+                        <div class="node-card-tags"><span>平抛</span><span>圆周运动</span><span>万有引力</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">机械能 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修二 · 第七章</div>
+                        <div class="node-card-tags"><span>功</span><span>功率</span><span>动能定理</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">动量 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>动量定理</span><span>动量守恒</span><span>碰撞</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线② 电磁学链 -->
+        <div class="main-line line-2">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">⚡</div>
+                <div class="main-line-title">
+                    <h2>主线② 电磁学链</h2>
+                    <span>电场 → 电路 → 磁场 → 电磁感应</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">静电场 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>电场强度</span><span>电势</span><span>电容</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">恒定电流 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修三 · 第十章</div>
+                        <div class="node-card-tags"><span>欧姆定律</span><span>电路分析</span><span>功率</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">磁场 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>安培力</span><span>洛伦兹力</span><span>带电粒子运动</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">电磁感应 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>法拉第定律</span><span>愣次定律</span><span>交流电</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">电磁场与电磁波 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>电磁振荡</span><span>电磁波</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线③ 热学链 -->
+        <div class="main-line line-3">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🔥</div>
+                <div class="main-line-title">
+                    <h2>主线③ 热学链</h2>
+                    <span>分子动理论 → 气体 → 物态变化 → 热力学定律</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">分子动理论 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修三 · 第八章</div>
+                        <div class="node-card-tags"><span>分子大小</span><span>分子运动</span><span>分子力</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">气体状态方程 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修三 · 第八章</div>
+                        <div class="node-card-tags"><span>pv=nRT</span><span>理想气体</span><span>状态变化</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">热力学定律 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修三 · 第八章</div>
+                        <div class="node-card-tags"><span>内能</span><span>热功</span><span>能量守恒</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线④ 光学链 -->
+        <div class="main-line line-4">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">💡</div>
+                <div class="main-line-title">
+                    <h2>主线④ 光学链</h2>
+                    <span>几何光学 → 波动光学</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">几何光学 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修一 / 选择性必修一</div>
+                        <div class="node-card-tags"><span>反射</span><span>折射</span><span>透镜成像</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">波动光学 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修一</div>
+                        <div class="node-card-tags"><span>干涉</span><span>衍射</span><span>偏振</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线⑤ 原子物理链 -->
+        <div class="main-line line-5">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🔬</div>
+                <div class="main-line-title">
+                    <h2>主线⑤ 原子物理链</h2>
+                    <span>原子结构 → 原子核 → 粒子物理</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">原子结构 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修三</div>
+                        <div class="node-card-tags"><span>原子模型</span><span>能级跃迁</span><span>光谱</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">原子核 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修三</div>
+                        <div class="node-card-tags"><span>核组成</span><span>核反应</span><span>结合能</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">粒子物理初步 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修三</div>
+                        <div class="node-card-tags"><span>四种基本相互作用</span><span>夸克</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="coming-soon">
+            <div>
+                <span>🔧</span>
+                <p>详细内容正在建设中...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>基于新课标教材整理 · 知识结构图</p>
+    </footer>
+
+    <script>
+        function toggleLine(line) {
+            line.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

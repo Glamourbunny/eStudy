@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高中英语知识体系</title>
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            --bg-card: rgba(255,255,255,0.05);
+            --text-primary: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --text-muted: rgba(255,255,255,0.4);
+            --radius: 12px;
+            --line-color: #9b59b6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; background: var(--bg-primary); min-height: 100vh; color: var(--text-primary); line-height: 1.7; }
+
+        header { text-align: center; padding: 40px 20px 25px; }
+        h1 { font-size: 2.2rem; font-weight: 300; letter-spacing: 0.12em; margin-bottom: 8px; background: linear-gradient(90deg, #9b59b6, #3498db); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+        .back-home { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: rgba(255,255,255,0.08); border-radius: 25px; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; margin-bottom: 30px; transition: background 0.2s; }
+        .back-home:hover { background: rgba(255,255,255,0.15); color: var(--text-primary); }
+
+        .main-line { margin-bottom: 28px; background: var(--bg-card); border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+        .main-line-header { display: flex; align-items: center; padding: 18px 22px; cursor: pointer; transition: background 0.25s; }
+        .main-line-header:hover { background: rgba(255,255,255,0.03); }
+        .main-line-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-right: 15px; flex-shrink: 0; background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+
+        .main-line-title { flex: 1; }
+        .main-line-title h2 { font-size: 1.05rem; font-weight: 500; margin-bottom: 3px; }
+        .main-line-title span { font-size: 0.72rem; color: var(--text-muted); }
+        .expand-icon { font-size: 1.3rem; color: var(--text-muted); transition: transform 0.3s; padding: 5px; }
+        .main-line.active .expand-icon { transform: rotate(45deg); }
+
+        .main-line-content { display: none; padding: 20px; border-top: 1px solid rgba(255,255,255,0.04); }
+        .main-line.active .main-line-content { display: block; }
+
+        .nodes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+        .node-card { background: rgba(255,255,255,0.06); border-radius: 10px; padding: 16px; border-left: 3px solid var(--line-color); cursor: pointer; transition: background 0.2s, transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
+        .node-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+
+        .node-card-title { font-size: 0.95rem; font-weight: 500; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .node-card-title .arrow { color: var(--text-muted); font-size: 0.9rem; }
+        .node-card-meta { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; }
+        .node-card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+        .node-card-tags span { background: rgba(255,255,255,0.1); padding: 3px 10px; border-radius: 10px; font-size: 0.7rem; color: rgba(255,255,255,0.65); }
+
+        .coming-soon { display: flex; align-items: center; justify-content: center; padding: 60px 20px; color: var(--text-muted); font-size: 1rem; }
+        .coming-soon div { text-align: center; }
+        .coming-soon span { font-size: 2rem; margin-bottom: 15px; display: block; }
+
+        footer { text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.25); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>高中英语知识体系</h1>
+        <p class="subtitle">语言能力 · 文化意识 · 思维品质 · 学习能力</p>
+    </header>
+
+    <div class="container">
+        <a href="index.html" class="back-home">← 返回总览</a>
+
+        <!-- 主线① 词汇与语法链 -->
+        <div class="main-line line-1">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">📖</div>
+                <div class="main-line-title">
+                    <h2>主线① 词汇与语法链</h2>
+                    <span>词汇 → 语法 → 句型</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">基础词汇 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>词义</span><span>词性</span><span>搭配</span><span>辨析</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">核心语法 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>时态</span><span>语态</span><span>语气</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">从句 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>名词性从句</span><span>定语从句</span><span>状语从句</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">特殊句型 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>倒装</span><span>虚拟语气</span><span>强调句</span><span>省略</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线② 语言技能链 -->
+        <div class="main-line line-2">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🎧</div>
+                <div class="main-line-title">
+                    <h2>主线② 语言技能链</h2>
+                    <span>听 → 说 → 读 → 写</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">听力技能 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>主旨</span><span>细节</span><span>推断</span><span>观点态度</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">口语表达 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>日常交际</span><span>观点表达</span><span>演讲</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">阅读理解 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>主旨大意</span><span>细节理解</span><span>推理判断</span><span>词义猜测</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">写作技能 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>应用文</span><span>读后续写</span><span>概要写作</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线③ 题型突破链 -->
+        <div class="main-line line-3">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">📝</div>
+                <div class="main-line-title">
+                    <h2>主线③ 题型突破链</h2>
+                    <span>完形填空 → 阅读理解 → 七选五 → 语法填空 → 写作</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">完形填空 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">高考题型</div>
+                        <div class="node-card-tags"><span>上下文</span><span>词义辨析</span><span>固定搭配</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">阅读理解 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">高考题型</div>
+                        <div class="node-card-tags"><span>细节</span><span>推断</span><span>主旨</span><span>态度</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">七选五 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">高考题型</div>
+                        <div class="node-card-tags"><span>段首</span><span>段中</span><span>段尾</span><span>过渡</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">语法填空 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">高考题型</div>
+                        <div class="node-card-tags"><span>词形变化</span><span>从句连词</span><span>非谓语</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">写作模板 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">高考题型</div>
+                        <div class="node-card-tags"><span>开头</span><span>衔接</span><span>结尾</span><span>高级句式</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线④ 文化与积累链 -->
+        <div class="main-line line-4">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🌍</div>
+                <div class="main-line-title">
+                    <h2>主线④ 文化与积累链</h2>
+                    <span>西方文化 → 英美文学 → 跨文化交际</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">西方文化常识 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>节日</span><span>习俗</span><span>历史</span><span>地理</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">英美文学初步 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">选择性必修</div>
+                        <div class="node-card-tags"><span>经典作家</span><span>名著片段</span><span>文学手法</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">跨文化交际 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">必修/选择性必修</div>
+                        <div class="node-card-tags"><span>中西方差异</span><span>礼仪</span><span>表达方式</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主线⑤ 高考冲刺链 -->
+        <div class="main-line line-5">
+            <div class="main-line-header" onclick="toggleLine(this.parentElement)">
+                <div class="main-line-icon">🎯</div>
+                <div class="main-line-title">
+                    <h2>主线⑤ 高考冲刺链</h2>
+                    <span>真题训练 → 技巧总结 → 模拟冲刺</span>
+                </div>
+                <span class="expand-icon">+</span>
+            </div>
+            <div class="main-line-content">
+                <div class="nodes-grid">
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">真题解析 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">高三复习</div>
+                        <div class="node-card-tags"><span>阅读真题</span><span>完形真题</span><span>写作真题</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">解题技巧 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">高三复习</div>
+                        <div class="node-card-tags"><span>快速阅读</span><span>精准定位</span><span>排除干扰</span></div>
+                    </a>
+                    <a href="#" class="node-card">
+                        <div class="node-card-title">易错点突破 <span class="arrow">→</span></div>
+                        <div class="node-card-meta">高三复习</div>
+                        <div class="node-card-tags"><span>易混词汇</span><span>语法陷阱</span><span>写作常见错误</span></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="coming-soon">
+            <div>
+                <span>🔧</span>
+                <p>详细内容正在建设中...</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>基于新课标教材整理 · 知识结构图</p>
+    </footer>
+
+    <script>
+        function toggleLine(line) {
+            line.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
